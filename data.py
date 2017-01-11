@@ -1,6 +1,14 @@
 #!/usr/bin/env python
 # encoding=utf-8
 
+
+'''
+1 获取英雄池.最近玩的英雄,次数,胜场 getHeroPool(accountId)
+2 获取开黑数据总结,getPlayPartyWinorLoss()  开黑规模,胜利场数
+3 谁是大腿  whoisbiglag() 返回形式:accountId:[次数,胜场]
+4 最近的胜负场数
+'''
+
 import dota2api
 import time
 import datetime
@@ -11,12 +19,6 @@ api = dota2api.Initialise('548C0DBC83E2510AE245A6E1AFCCB5BA')
 match = api.get_match_history(account_id=245587068)
 friden = {"brave":169478997,"bear":337190674,"monkey":131173904,"man":284155258,"beard":245587068,"ass":123343610}
 
-def getPlayTime(star,over):
-    for i in xrange(100):
-        dataStamp = match['matches'][i]['start_time']
-        data = time.localtime(dataStamp)
-        otherStyleTime = time.strftime("%Y-%m-%d %H:%M:%S", data)
-        timeList.append(otherStyleTime)
 
 def getPlayHero():
     heroName = []
@@ -46,9 +48,11 @@ def getHeroName(id):
     for i in xrange(112):
         if (heroId['heroes'][i].has_key('id') and heroId['heroes'][i]['id'] == id):
             name = heroId['heroes'][i]['localized_name']
-    return name
+            return name
 
-#获取7日内的比赛,以列表返回
+'''
+获取7日内的比赛,以列表返回
+'''
 def getMatchByLatest7Days(accountId):
     matchList = []
     match = api.get_match_history(account_id=accountId)
@@ -61,6 +65,9 @@ def getMatchByLatest7Days(accountId):
 
     return matchList
 
+'''
+最近accountId的胜负场数
+'''
 def WinorLoss(accountId):
     matchList = getMatchByLatest7Days(accountId)
     matchId = []
@@ -92,7 +99,7 @@ def getWinorLossByMatchId(matchId):
     detail = api.get_match_details(match_id=matchId)
     return detail['radiant_win']
 
-#返回此局此accountID是在天灾还是近卫
+#返回此局的accountID是在天灾还是近卫
 def getRainantorDire(matchId,accountId):
     detail = api.get_match_details(matchId)
     for i in range(0,9):
@@ -103,10 +110,9 @@ def getRainantorDire(matchId,accountId):
         else:
             flag = 1
     return flag
-
-
-
-#获取此局比赛是几人黑
+'''
+获取此局比赛是几人黑
+'''
 def getplayPartyCount(matchId):
     playAccountList = []#本局10名玩家的id
     playPartner = []#开黑成员
@@ -181,6 +187,11 @@ def getPlayPartyWinorLoss(accountId):
     rateCount['rate'] = rate
     return rateCount
 
+
+'''
+跟哪位大神开黑时的胜利次多.
+accountId:[次数,胜场]
+'''
 def whoisbiglag(accountId):
     match = getMatchByLatest7Days(accountId)
     teamMate2 = {'ass':[0,0],'bear':[0,0],'monkey':[0,0],'man':[0,0],'brave':[0,0],'beard':[0,0]}
@@ -235,8 +246,28 @@ def whoisbiglag(accountId):
     result = {'2':teamMate2,'3':teamMate3,'4':teamMate4,'5':teamMate5}
     return result
 
+'''
+获取最近玩的英雄,次数,胜场
+'''
+def getHeroPool(accountId):
+    heroPool = {}#key:英雄名 value:countAndWin
+    countAndWin = [0,0]
 
+    match = getMatchByLatest7Days(accountId)
+    for x in xrange(0,len(match)):
+        player = match[x]['players']
+        matchId = match[x]['match_id']
 
+        for y in xrange(0,len(player)):
+            if accountId == player[y]['account_id']:
+                heroName = getHeroName(player[y]['hero_id'])
+                if not heroPool.has_key(heroName):
+                    heroPool[heroName] = [0,0]
+                heroPool[heroName][0] += 1
+                if getRainantorDire(matchId,accountId) != getWinorLossByMatchId(matchId):
+                    heroPool[heroName][1] += 1
+
+    return heroPool
 
 if __name__ == '__main__':
 
@@ -255,9 +286,15 @@ if __name__ == '__main__':
     # for k,v in friden.items():
     #     rateCount = getPlayPartyWinorLoss(v)
     #     print '{0}:最近单排{1}次,胜{2}场.二人黑{3}次,胜{4}场.三个黑{5}次,胜{6}场.四人黑{7},胜{8}场,五人黑{9}次,胜{10}场'.format(k,rateCount['playparty'][0],rateCount['rate'][0],rateCount['playparty'][1],rateCount['rate'][1],rateCount['playparty'][2],rateCount['rate'][2],rateCount['playparty'][3],rateCount['rate'][3],rateCount['playparty'][4],rateCount['rate'][4])
-
-    for k,v in friden.items():
-        result = whoisbiglag(v)
-        print result
-
-
+    #
+    # for k,v in friden.items():
+    #     result = whoisbiglag(v)
+    #     print result
+    # for k,v in friden.items():
+    #     heroPool = getHeroPool(v)
+    #     heroPool = sorted(heroPool.iteritems(),key=lambda d:d[1],reverse=True)
+    #     print '{0}最近玩了{1}个英雄'.format(k,len(heroPool))
+    #     for x in xrange(len(heroPool)):
+    #         print heroPool[x]
+    #     print '*'*30
+    whoisbiglag(friden['ass'])
