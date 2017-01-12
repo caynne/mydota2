@@ -13,6 +13,8 @@ import dota2api
 import time
 import datetime
 from collections import Counter
+import requests
+import os
 
 api = dota2api.Initialise('548C0DBC83E2510AE245A6E1AFCCB5BA')
 
@@ -57,7 +59,7 @@ def getMatchByLatest7Days(accountId):
     matchList = []
     match = api.get_match_history(account_id=accountId)
     #获得七天前的时间
-    sevenDayAgo = (datetime.datetime.now() - datetime.timedelta(days = 17))
+    sevenDayAgo = (datetime.datetime.now() - datetime.timedelta(days = 1))
     sevenDayAgoTimeStamp = int(time.mktime(sevenDayAgo.timetuple()))
     for x in xrange(0,len(match['matches'])):
         if sevenDayAgoTimeStamp <= match['matches'][x]['start_time']:
@@ -248,10 +250,10 @@ def whoisbiglag(accountId):
 
 '''
 获取最近玩的英雄,次数,胜场
+返回形式  key:英雄名 value:[玩的次数,胜的场数]
 '''
 def getHeroPool(accountId):
-    heroPool = {}#key:英雄名 value:countAndWin
-    countAndWin = [0,0]
+    heroPool = {}#key:英雄名 value:[玩的次数,胜的场数]
 
     match = getMatchByLatest7Days(accountId)
     for x in xrange(0,len(match)):
@@ -268,6 +270,25 @@ def getHeroPool(accountId):
                     heroPool[heroName][1] += 1
 
     return heroPool
+
+'''
+通过accountId获取用户头像,并写入本地.
+格式:用户昵称.jpg
+路径:项目文件夹/avatar
+'''
+def getAvatarImg(accountId):
+    playdetail = api.get_player_summaries(accountId)
+    imgUrl = playdetail['players'][0]['avatarfull']
+    playName = playdetail['players'][0]['personaname']
+    imgPath = os.path.join(os.getcwd(),'avatar/')
+    if not os.path.exists(imgPath):
+        os.mkdir(imgPath)
+    if os.path.exists(imgPath+playName+'.jpg'):
+        os.remove(imgPath+playName+'.jpg')
+    r = requests.get(url=imgUrl)
+    f = open(imgPath+playName+'.jpg',mode='wb')
+    f.write(r.content)
+    f.close()
 
 if __name__ == '__main__':
 
@@ -297,4 +318,4 @@ if __name__ == '__main__':
     #     for x in xrange(len(heroPool)):
     #         print heroPool[x]
     #     print '*'*30
-    whoisbiglag(friden['ass'])
+    pass
