@@ -15,7 +15,16 @@ friden = {"brave":169478997,"bear":337190674,"monkey":131173904,"man":284155258,
 def writeHeroPool2csv():
     #for k,v in friden.items():
     heroPool = d2d.getHeroPool(169478997)
-    heroPoolJson = json.dumps(heroPool)
+    #heroPoolJson = json.dumps(heroPool)
+    wb = xlwt.Workbook()
+    ws = wb.add_sheet('heroPool',cell_overwrite_ok=True)
+    row = 0
+    col = 0
+    for k,v in sorted(heroPool.items(),key=lambda d:d[1],reverse=True):
+        ws.write(row,col,k)
+
+
+
     print heroPool
 
 
