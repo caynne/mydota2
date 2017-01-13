@@ -59,7 +59,7 @@ def getMatchByLatest7Days(accountId):
     matchList = []
     match = api.get_match_history(account_id=accountId)
     #获得七天前的时间
-    sevenDayAgo = (datetime.datetime.now() - datetime.timedelta(days = 1))
+    sevenDayAgo = (datetime.datetime.now() - datetime.timedelta(days = 7))
     sevenDayAgoTimeStamp = int(time.mktime(sevenDayAgo.timetuple()))
     for x in xrange(0,len(match['matches'])):
         if sevenDayAgoTimeStamp <= match['matches'][x]['start_time']:
