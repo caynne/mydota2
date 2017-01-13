@@ -10,7 +10,6 @@ import sys
 reload(sys)
 sys.setdefaultencoding('utf-8')
 
-
 friden = {"brave":169478997,"bear":337190674,"monkey":131173904,"man":284155258,"beard":245587068,"ass":123343610}
 
 def writeHeroPool2csv():

@@ -291,7 +291,6 @@ def getAvatarImg(accountId):
     f.close()
 
 if __name__ == '__main__':
-
     #获取7天内胜负场
     # for k,v in friden.items():
     #     temp = WinorLoss(v)
