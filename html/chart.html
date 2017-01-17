@@ -1,0 +1,40 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>weekly</title>
+    <script src = 'echarts.min.js'></script>
+</head>
+<body>
+    <div id = 'main' style="width:600px; height:400px;"></div>
+    <script>
+        var myChart = echarts.init(document.getElementById('main'));
+        var option = {
+                title: {
+                    text: '胡神的英雄池'
+                },
+                tooltip: {},
+                legend: {
+                    data:['胜'],
+                    data:['负']
+                },
+                xAxis: {
+                    data: ["蓝猫","小强","卡尔","上黑","船长","大鱼","小鱼"]
+                },
+                yAxis: {},
+                series: [{
+                    name: '胜',
+                    type: 'bar',
+                    data: [5, 20, 36, 10, 10, 20,111]
+                },{
+                    name:'负',
+                    type:'bar',
+                    data:[1,2,3,4,5,6,7]
+                }
+                ]
+            };
+        myChart.setOption(option);
+    </script>
+</body>
+
+</html>
