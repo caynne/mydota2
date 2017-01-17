@@ -10,7 +10,7 @@ import sys
 reload(sys)
 sys.setdefaultencoding('utf-8')
 
-friden = {"brave":169478997,"bear":337190674,"monkey":131173904,"man":284155258,"beard":245587068,"ass":123343610}
+friden = {"brave":169478997,"bear":337190674,"monkey":131173904,"man":284155258,"beard":245587068,"ass":123343610,'monkey2':336778995}
 
 def writeHeroPool2csv():
     wb = xlwt.Workbook()
@@ -28,8 +28,69 @@ def writeHeroPool2csv():
                 ws.write(row,col,i)
             col = 0
             row += 1
+        print k
     wb.save('heroPool.csv')
 
+def writePlayPartyRate2Csv():
+    wb = xlwt.Workbook()
+    for k,v in friden.items():
+        rate = d2d.getPlayPartyWinorLoss(v)
+        ws = wb.add_sheet(k,cell_overwrite_ok=True)
+
+        row = 0
+        col = 0
+        for kk,vv in sorted(rate.items(),key=lambda d:d[0],reverse=False):
+            ws.write(row,col,kk)
+            for i in vv:
+                col += 1
+                ws.write(row,col,i)
+            col = 0
+            row += 1
+    wb.save('PlayPartyRate.csv')
+
+def writeWinOrLoss2Csv():
+    wb = xlwt.Workbook()
+    for k,v in friden.items():
+        WinOrLoss = d2d.WinorLoss(v)
+        ws = wb.add_sheet(k,cell_overwrite_ok=True)
+
+        row = 0
+        col = 0
+        for x in WinOrLoss:
+            ws.write(row,col,x)
+            col = 0
+            row += 1
+    wb.save('WinOrLoss.csv')
+
+def writePlayPartyRate2Json():
+    dict = {}
+    for k,v in friden.items():
+        rate = d2d.getPlayPartyWinorLoss(v)
+        dict[k] = rate
+    with open('/Users/zidongceshi/code/mydota2/data/rate.json','wb') as f:
+        f.write(json.dumps(dict))
+
+def writeHeroPool2Json():
+    dict = {}
+    for k,v in friden.items():
+        rate = d2d.getHeroPool(v)
+        dict[k] = rate
+    with open('/Users/zidongceshi/code/mydota2/data/heroPool.json','wb') as f:
+        f.write(json.dumps(dict))
+
+def writeWinOrLoss2Json():
+    dict = {}
+    for k,v in friden.items():
+        rate = d2d.WinorLoss(v)
+        dict[k] = rate
+    with open('/Users/zidongceshi/code/mydota2/data/winOrloss.json','wb') as f:
+        f.write(json.dumps(dict))
+
+def run():
+    writePlayPartyRate2Csv()
+    writeHeroPool2csv()
 
 if __name__ == "__main__":
-    writeHeroPool2csv()
+    writePlayPartyRate2Json()
+    writeHeroPool2Json()
+    writeWinOrLoss2Json()

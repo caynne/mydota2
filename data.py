@@ -15,31 +15,27 @@ import datetime
 from collections import Counter
 import requests
 import os
+import ConfigParser
 
+
+'''
+设置常量
+'''
+global DAYS
+cf = ConfigParser.ConfigParser()
+cf.read('config.conf')
+DAYS = cf.getint('constant','DAYS')
+friden = {"brave":169478997,"bear":337190674,"monkey1":131173904,"man":284155258,"beard":245587068,"ass":123343610,'monkey2':336778995}
+
+
+'''
+初始化api
+'''
 api = dota2api.Initialise('548C0DBC83E2510AE245A6E1AFCCB5BA')
 
-match = api.get_match_history(account_id=245587068)
-friden = {"brave":169478997,"bear":337190674,"monkey":131173904,"man":284155258,"beard":245587068,"ass":123343610}
-
-
-def getPlayHero():
-    heroName = []
-    for i in xrange(100):
-        players = match['matches'][i]['players']
-        for j in xrange(10):
-            if 245587068 == players[j]['account_id']:
-                heroId = players[j]['hero_id']
-                heroName.append(getHeroName(int(heroId)))
-    return heroName
-
-
-def analysisPlayHero():
-    playHero = getPlayHero()
-    list = set(playHero)
-    list = sorted(list,key=lambda d:d[1],reverse=True)
-    for item in list:
-        print 'you playd %s:%d' % (item,playHero.count(item))
-
+'''
+通过英雄id获得对应英雄名
+'''
 def getHeroName(id):
     heroId = api.get_heroes()
     # if(id >= 30):
@@ -53,13 +49,13 @@ def getHeroName(id):
             return name
 
 '''
-获取7日内的比赛,以列表返回
+获取DAYS日内的比赛,以列表返回
 '''
-def getMatchByLatest7Days(accountId):
+def getMatchByLatest7Days(accountId,):
     matchList = []
     match = api.get_match_history(account_id=accountId)
     #获得七天前的时间
-    sevenDayAgo = (datetime.datetime.now() - datetime.timedelta(days = 7))
+    sevenDayAgo = (datetime.datetime.now() - datetime.timedelta(days = DAYS))
     sevenDayAgoTimeStamp = int(time.mktime(sevenDayAgo.timetuple()))
     for x in xrange(0,len(match['matches'])):
         if sevenDayAgoTimeStamp <= match['matches'][x]['start_time']:
@@ -261,7 +257,7 @@ def getHeroPool(accountId):
         matchId = match[x]['match_id']
 
         for y in xrange(0,len(player)):
-            if accountId == player[y]['account_id']:
+            if int(accountId) == player[y]['account_id']:
                 heroName = getHeroName(player[y]['hero_id'])
                 if not heroPool.has_key(heroName):
                     heroPool[heroName] = [0,0]
@@ -271,13 +267,25 @@ def getHeroPool(accountId):
 
     return heroPool
 
+def getAccountHeroPool():
+    accountHeroPool = {}
+    for k,v in friden.items():
+        heroPool = getHeroPool(v)
+        if not accountHeroPool.has_key(k):
+            accountHeroPool[k] = heroPool
+        accountHeroPool[k] = heroPool
+    return accountHeroPool
+
 '''
 通过accountId获取用户头像,并写入本地.
 格式:用户昵称.jpg
 路径:项目文件夹/avatar
+todo:用户名为0/0这个的时候,无法保存.提示:No such file or directory: u'/Users/zidongceshi/code/mydota2/avatar/0/0.jpg'
 '''
 def getAvatarImg(accountId):
     playdetail = api.get_player_summaries(accountId)
+    if not len(playdetail['players']):
+        return
     imgUrl = playdetail['players'][0]['avatarfull']
     playName = playdetail['players'][0]['personaname']
     imgPath = os.path.join(os.getcwd(),'avatar/')
@@ -289,6 +297,50 @@ def getAvatarImg(accountId):
     f = open(imgPath+playName+'.jpg',mode='wb')
     f.write(r.content)
     f.close()
+
+'''
+
+'''
+def getPlayerId():
+    accountIdList = []
+    for k,v in friden.items():
+        match = getMatchByLatest7Days(v)
+        for x in xrange(0,len(match)):
+            player = match[x]['players']
+            for y in xrange(0,len(player)):
+                if player[y]['account_id'] in accountIdList:
+                    continue
+                else:
+                    accountIdList.append(player[y]['account_id'])
+    return accountIdList
+
+
+'''
+todo:Connection aborted.', error(54, 'Connection reset by peer
+'''
+def getPlayerNickname():
+    nickNameList = []
+    accountId = getPlayerId()
+    for x in accountId:
+        playdetail = api.get_player_summaries(x)
+        if not len(playdetail['players']):
+            continue
+        nickNameList.append(playdetail['players'][0]['personaname'])
+    return nickNameList
+
+def getFileName():
+    path = '/Users/zidongceshi/code/mydota2/avatar'
+    pass
+
+
+
+def downPlayerAvatarImg():
+    accountId = getPlayerId()
+    for i in accountId:
+        getAvatarImg(i)
+
+
+
 
 if __name__ == '__main__':
     #获取7天内胜负场
@@ -317,4 +369,8 @@ if __name__ == '__main__':
     #     for x in xrange(len(heroPool)):
     #         print heroPool[x]
     #     print '*'*30
+    #nickname = getPlayerNickname()
+    import wordcloud
+    import PIL
+    from wordcloud import WordCloud
     pass
