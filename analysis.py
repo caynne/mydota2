@@ -18,9 +18,7 @@ cf = ConfigParser()
 cf.read('config.conf')
 friden = {'ass':cf.getint('constant','ass'),'bear':cf.getint('constant','bear'),'brave':cf.getint('constant','brave'),'monkey1':cf.getint('constant','monkey1'),'man':cf.getint('constant','man'),'beard':cf.getint('constant','beard')}
 
-poolList = d2d.getHeroPool(friden['beard'])
-
-data = pd.Series(poolList)
+data = pd.read_json('./data/rate_0117.json')
 
 print data
 

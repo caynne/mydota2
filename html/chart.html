@@ -4,36 +4,84 @@
     <meta charset="UTF-8">
     <title>weekly</title>
     <script src = 'echarts.min.js'></script>
+    <script src = 'jquery-3.1.1.min.js'></script>
 </head>
 <body>
-    <div id = 'main' style="width:600px; height:400px;"></div>
+    <div id = '1' style="width:600px; height:400px;"></div>
+    <div id = '2' style="width:600px;height:400px;"></div>
     <script>
-        var myChart = echarts.init(document.getElementById('main'));
-        var option = {
+        var account
+        var heroName = []
+        var count = []
+        var win = []
+        $.ajax({
+            url: '../data/heroPool_0117.json',
+            type: 'GET',
+            dataType: 'json',
+            data: {},
+        }).done(function(data){
+            heroPool = data;
+            account = 'bear'
+            for (var i in heroPool[account]){
+                heroName.push(i)
+            }
+            console.log(heroName)
+            for (var i=0;i < heroName.length;i++){
+                count.push(heroPool[account][heroName[i]][0])
+            }
+            for (var i=0;i < heroName.length;i++){
+                win.push(heroPool[account][heroName[i]][1])
+            }
+            console.log(heroPool)
+            console.log(count)
+            console.log(win)
+
+            var myChart = echarts.init(document.getElementById(1));
+            var option = {
                 title: {
-                    text: '胡神的英雄池'
+                    text: account
                 },
                 tooltip: {},
                 legend: {
-                    data:['胜'],
-                    data:['负']
+                    data:['胜','负'],
+                    //data:['负'],
                 },
                 xAxis: {
-                    data: ["蓝猫","小强","卡尔","上黑","船长","大鱼","小鱼"]
+                    //data: ["蓝猫","小强","卡尔","上黑","船长","大鱼","小鱼",'哈',"逗"]
+                    data:heroName,
+                    scale:false
                 },
                 yAxis: {},
                 series: [{
                     name: '胜',
                     type: 'bar',
-                    data: [5, 20, 36, 10, 10, 20,111]
+                    stack:'总量',
+                    label:{
+                        normal:{
+                            show:true,
+                            position:'insideRight'
+                        }
+                    },
+                    data: count
                 },{
                     name:'负',
                     type:'bar',
-                    data:[1,2,3,4,5,6,7]
+                    stack:'总量',
+                    label:{
+                        normal:{
+                            show:true,
+                            position:'insideRight'
+                        }
+                    },
+                    data:win
                 }
                 ]
             };
         myChart.setOption(option);
+        })
+
+
+
     </script>
 </body>
 
