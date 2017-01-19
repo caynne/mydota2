@@ -7,77 +7,546 @@
     <script src = 'jquery-3.1.1.min.js'></script>
 </head>
 <body>
-    <div id = '1' style="width:600px; height:400px;"></div>
-    <div id = '2' style="width:600px;height:400px;"></div>
-    <script>
-        var account
-        var heroName = []
-        var count = []
-        var win = []
-        $.ajax({
-            url: '../data/heroPool_0117.json',
-            type: 'GET',
-            dataType: 'json',
-            data: {},
-        }).done(function(data){
-            heroPool = data;
-            account = 'bear'
-            for (var i in heroPool[account]){
-                heroName.push(i)
-            }
-            console.log(heroName)
-            for (var i=0;i < heroName.length;i++){
-                count.push(heroPool[account][heroName[i]][0])
-            }
-            for (var i=0;i < heroName.length;i++){
-                win.push(heroPool[account][heroName[i]][1])
-            }
-            console.log(heroPool)
-            console.log(count)
-            console.log(win)
+    <h1>
+        <button type="button" id = 'ass'><img src="../avatar/jiji太大，裤裆装不下.jpg" style="width:90px" class="circle"></button>
+        <button type="button" id = 'bear'><img src="../avatar/OB熊.jpg" style="width:90px" class="circle"></button>
+        <button type="button" id = 'monkey'><img src="../avatar/小老虎.jpg" style="width:90px" class="circle"></button>
+        <button type="button" id = 'brave'><img src="../avatar/白菜°.jpg" style="width:90px" class="circle"></button>
+        <button type="button" id = 'man'><img src="../avatar/大神牛.jpg" style="width:90px" class="circle"></button>
+        <button type="button" id = 'beard'><img src="../avatar/怼穿肠.jpg" style="width:90px" class="circle"></button>
+    </h1>
 
-            var myChart = echarts.init(document.getElementById(1));
-            var option = {
-                title: {
-                    text: account
-                },
-                tooltip: {},
-                legend: {
-                    data:['胜','负'],
-                    //data:['负'],
-                },
-                xAxis: {
-                    //data: ["蓝猫","小强","卡尔","上黑","船长","大鱼","小鱼",'哈',"逗"]
-                    data:heroName,
-                    scale:false
-                },
-                yAxis: {},
-                series: [{
-                    name: '胜',
-                    type: 'bar',
-                    stack:'总量',
-                    label:{
-                        normal:{
-                            show:true,
-                            position:'insideRight'
-                        }
-                    },
-                    data: count
-                },{
-                    name:'负',
-                    type:'bar',
-                    stack:'总量',
-                    label:{
-                        normal:{
-                            show:true,
-                            position:'insideRight'
-                        }
-                    },
-                    data:win
+    <div id = '1' style="width:600px; height:400px;"></div>
+
+    <style>
+        .circle{
+            border:0;
+            //border:1px #f8fff9 solid;
+            //border-style: none;
+            bordwidth:50px;
+            border-radius: 50%;
+            border-color: #f8fff9;
+            margin: 0px auto 5px auto;
+        }
+
+    </style>
+
+    <script>
+        $("#ass").click(function(event){
+            var account
+            var heroName = []
+            var loss = []
+            var win = []
+            $.ajax({
+                url: '../data/heroPool_0117.json',
+                type: 'GET',
+                dataType: 'json',
+                data: {},
+            }).done(function(data){
+                heroPool = data;
+                account = 'ass'
+                for (var i in heroPool[account]){
+                    heroName.push(i)
                 }
-                ]
-            };
-        myChart.setOption(option);
+                console.log(heroName)
+                for (var i=0;i < heroName.length;i++){
+                    loss.push(heroPool[account][heroName[i]][0]-heroPool[account][heroName[i]][1])
+                }
+                for (var i=0;i < heroName.length;i++){
+                    win.push(heroPool[account][heroName[i]][1])
+                }
+                console.log(heroPool)
+                console.log(loss)
+                console.log(win)
+
+                var myChart = echarts.init(document.getElementById(1));
+                var option = {
+                    tooltip:{
+                        trigger:'axis',
+                        axisPointer:{
+                            type:'shadow'
+                        }
+                    },
+                    title: {
+                        text: account
+                    },
+
+                    legend: {
+                        data:['胜','负'],
+                        //data:['负'],
+                    },
+
+                    xAxis: {
+                        //data: ["蓝猫","小强","卡尔","上黑","船长","大鱼","小鱼",'哈',"逗"]
+                        data:heroName,
+                        scale:false,
+                        type:'category',
+                        axisLabel:{
+                            interval:0,
+                            rotate:90
+                        }
+
+                    },
+                    yAxis: {
+                        type:'value',
+                    },
+                    series: [{
+                        name: '胜',
+                        type: 'bar',
+                        stack:'总量',
+                        label:{
+                            normal:{
+                                show:true,
+                                position:'insideBottomRight'
+                            }
+                        },
+                        data: win
+                    },{
+                        name:'负',
+                        type:'bar',
+                        stack:'总量',
+                        label:{
+                            normal:{
+                                show:true,
+                                position:'insideBottomRight'
+                            }
+                        },
+                        data:loss
+                    }
+                    ]
+                };
+            myChart.setOption(option);
+            })
+        })
+        $("#bear").click(function(event){
+            var account
+            var heroName = []
+            var loss = []
+            var win = []
+            $.ajax({
+                url: '../data/heroPool_0117.json',
+                type: 'GET',
+                dataType: 'json',
+                data: {},
+            }).done(function(data){
+                heroPool = data;
+                account = 'bear'
+                for (var i in heroPool[account]){
+                    heroName.push(i)
+                }
+                console.log(heroName)
+                for (var i=0;i < heroName.length;i++){
+                    loss.push(heroPool[account][heroName[i]][0]-heroPool[account][heroName[i]][1])
+                }
+                for (var i=0;i < heroName.length;i++){
+                    win.push(heroPool[account][heroName[i]][1])
+                }
+                console.log(heroPool)
+                console.log(loss)
+                console.log(win)
+
+                var myChart = echarts.init(document.getElementById(1));
+                var option = {
+                    tooltip:{
+                        trigger:'axis',
+                        axisPointer:{
+                            type:'shadow'
+                        }
+                    },
+                    title: {
+                        text: account
+                    },
+
+                    legend: {
+                        data:['胜','负'],
+                        //data:['负'],
+                    },
+
+                    xAxis: {
+                        //data: ["蓝猫","小强","卡尔","上黑","船长","大鱼","小鱼",'哈',"逗"]
+                        data:heroName,
+                        scale:false,
+                        type:'category',
+                        axisLabel:{
+                            interval:0,
+                            rotate:90
+                        }
+
+                    },
+                    yAxis: {
+                        type:'value',
+                    },
+                    series: [{
+                        name: '胜',
+                        type: 'bar',
+                        stack:'总量',
+                        label:{
+                            normal:{
+                                show:true,
+                                position:'insideBottomRight'
+                            }
+                        },
+                        data: win
+                    },{
+                        name:'负',
+                        type:'bar',
+                        stack:'总量',
+                        label:{
+                            normal:{
+                                show:true,
+                                position:'insideBottomRight'
+                            }
+                        },
+                        data:loss
+                    }
+                    ]
+                };
+            myChart.setOption(option);
+            })
+        })
+        $("#monkey").click(function(event){
+            var account
+            var heroName = []
+            var loss = []
+            var win = []
+            $.ajax({
+                url: '../data/heroPool_0117.json',
+                type: 'GET',
+                dataType: 'json',
+                data: {},
+            }).done(function(data){
+                heroPool = data;
+                account = 'monkey'
+                for (var i in heroPool[account]){
+                    heroName.push(i)
+                }
+                console.log(heroName)
+                for (var i=0;i < heroName.length;i++){
+                    loss.push(heroPool[account][heroName[i]][0]-heroPool[account][heroName[i]][1])
+                }
+                for (var i=0;i < heroName.length;i++){
+                    win.push(heroPool[account][heroName[i]][1])
+                }
+                console.log(heroPool)
+                console.log(loss)
+                console.log(win)
+
+                var myChart = echarts.init(document.getElementById(1));
+                var option = {
+                    tooltip:{
+                        trigger:'axis',
+                        axisPointer:{
+                            type:'shadow'
+                        }
+                    },
+                    title: {
+                        text: account
+                    },
+
+                    legend: {
+                        data:['胜','负'],
+                        //data:['负'],
+                    },
+
+                    xAxis: {
+                        //data: ["蓝猫","小强","卡尔","上黑","船长","大鱼","小鱼",'哈',"逗"]
+                        data:heroName,
+                        scale:false,
+                        type:'category',
+                        axisLabel:{
+                            interval:0,
+                            rotate:90
+                        }
+
+                    },
+                    yAxis: {
+                        type:'value',
+                    },
+                    series: [{
+                        name: '胜',
+                        type: 'bar',
+                        stack:'总量',
+                        label:{
+                            normal:{
+                                show:true,
+                                position:'insideBottomRight'
+                            }
+                        },
+                        data: win
+                    },{
+                        name:'负',
+                        type:'bar',
+                        stack:'总量',
+                        label:{
+                            normal:{
+                                show:true,
+                                position:'insideBottomRight'
+                            }
+                        },
+                        data:loss
+                    }
+                    ]
+                };
+            myChart.setOption(option);
+            })
+        })
+        $("#man").click(function(event){
+            var account
+            var heroName = []
+            var loss = []
+            var win = []
+            $.ajax({
+                url: '../data/heroPool_0117.json',
+                type: 'GET',
+                dataType: 'json',
+                data: {},
+            }).done(function(data){
+                heroPool = data;
+                account = 'man'
+                for (var i in heroPool[account]){
+                    heroName.push(i)
+                }
+                console.log(heroName)
+                for (var i=0;i < heroName.length;i++){
+                    loss.push(heroPool[account][heroName[i]][0]-heroPool[account][heroName[i]][1])
+                }
+                for (var i=0;i < heroName.length;i++){
+                    win.push(heroPool[account][heroName[i]][1])
+                }
+                console.log(heroPool)
+                console.log(loss)
+                console.log(win)
+
+                var myChart = echarts.init(document.getElementById(1));
+                var option = {
+                    tooltip:{
+                        trigger:'axis',
+                        axisPointer:{
+                            type:'shadow'
+                        }
+                    },
+                    title: {
+                        text: account
+                    },
+
+                    legend: {
+                        data:['胜','负'],
+                        //data:['负'],
+                    },
+
+                    xAxis: {
+                        //data: ["蓝猫","小强","卡尔","上黑","船长","大鱼","小鱼",'哈',"逗"]
+                        data:heroName,
+                        scale:false,
+                        type:'category',
+                        axisLabel:{
+                            interval:0,
+                            rotate:90
+                        }
+
+                    },
+                    yAxis: {
+                        type:'value',
+                    },
+                    series: [{
+                        name: '胜',
+                        type: 'bar',
+                        stack:'总量',
+                        label:{
+                            normal:{
+                                show:true,
+                                position:'insideBottomRight'
+                            }
+                        },
+                        data: win
+                    },{
+                        name:'负',
+                        type:'bar',
+                        stack:'总量',
+                        label:{
+                            normal:{
+                                show:true,
+                                position:'insideBottomRight'
+                            }
+                        },
+                        data:loss
+                    }
+                    ]
+                };
+            myChart.setOption(option);
+            })
+        })
+        $("#beard").click(function(event){
+            var account
+            var heroName = []
+            var loss = []
+            var win = []
+            $.ajax({
+                url: '../data/heroPool_0117.json',
+                type: 'GET',
+                dataType: 'json',
+                data: {},
+            }).done(function(data){
+                heroPool = data;
+                account = 'beard'
+                for (var i in heroPool[account]){
+                    heroName.push(i)
+                }
+                console.log(heroName)
+                for (var i=0;i < heroName.length;i++){
+                    loss.push(heroPool[account][heroName[i]][0]-heroPool[account][heroName[i]][1])
+                }
+                for (var i=0;i < heroName.length;i++){
+                    win.push(heroPool[account][heroName[i]][1])
+                }
+                console.log(heroPool)
+                console.log(loss)
+                console.log(win)
+
+                var myChart = echarts.init(document.getElementById(1));
+                var option = {
+                    tooltip:{
+                        trigger:'axis',
+                        axisPointer:{
+                            type:'shadow'
+                        }
+                    },
+                    title: {
+                        text: account
+                    },
+
+                    legend: {
+                        data:['胜','负'],
+                        //data:['负'],
+                    },
+
+                    xAxis: {
+                        //data: ["蓝猫","小强","卡尔","上黑","船长","大鱼","小鱼",'哈',"逗"]
+                        data:heroName,
+                        scale:false,
+                        type:'category',
+                        axisLabel:{
+                            interval:0,
+                            rotate:90
+                        }
+
+                    },
+                    yAxis: {
+                        type:'value',
+                    },
+                    series: [{
+                        name: '胜',
+                        type: 'bar',
+                        stack:'总量',
+                        label:{
+                            normal:{
+                                show:true,
+                                position:'insideBottomRight'
+                            }
+                        },
+                        data: win
+                    },{
+                        name:'负',
+                        type:'bar',
+                        stack:'总量',
+                        label:{
+                            normal:{
+                                show:true,
+                                position:'insideBottomRight'
+                            }
+                        },
+                        data:loss
+                    }
+                    ]
+                };
+            myChart.setOption(option);
+            })
+        })
+        $("#brave").click(function(event){
+            var account
+            var heroName = []
+            var loss = []
+            var win = []
+            $.ajax({
+                url: '../data/heroPool_0117.json',
+                type: 'GET',
+                dataType: 'json',
+                data: {},
+            }).done(function(data){
+                heroPool = data;
+                account = 'brave'
+                for (var i in heroPool[account]){
+                    heroName.push(i)
+                }
+                console.log(heroName)
+                for (var i=0;i < heroName.length;i++){
+                    loss.push(heroPool[account][heroName[i]][0]-heroPool[account][heroName[i]][1])
+                }
+                for (var i=0;i < heroName.length;i++){
+                    win.push(heroPool[account][heroName[i]][1])
+                }
+                console.log(heroPool)
+                console.log(loss)
+                console.log(win)
+
+                var myChart = echarts.init(document.getElementById(1));
+                var option = {
+                    tooltip:{
+                        trigger:'axis',
+                        axisPointer:{
+                            type:'shadow'
+                        }
+                    },
+                    title: {
+                        text: account
+                    },
+
+                    legend: {
+                        data:['胜','负'],
+                        //data:['负'],
+                    },
+
+                    xAxis: {
+                        //data: ["蓝猫","小强","卡尔","上黑","船长","大鱼","小鱼",'哈',"逗"]
+                        data:heroName,
+                        scale:false,
+                        type:'category',
+                        axisLabel:{
+                            interval:0,
+                            rotate:90
+                        }
+
+                    },
+                    yAxis: {
+                        type:'value',
+                    },
+                    series: [{
+                        name: '胜',
+                        type: 'bar',
+                        stack:'总量',
+                        label:{
+                            normal:{
+                                show:true,
+                                position:'insideBottomRight'
+                            }
+                        },
+                        data: win
+                    },{
+                        name:'负',
+                        type:'bar',
+                        stack:'总量',
+                        label:{
+                            normal:{
+                                show:true,
+                                position:'insideBottomRight'
+                            }
+                        },
+                        data:loss
+                    }
+                    ]
+                };
+            myChart.setOption(option);
+            })
         })
 
 
