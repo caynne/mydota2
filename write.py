@@ -6,6 +6,8 @@ import xlwt
 import json
 import codecs
 import sys
+import os
+import time
 
 reload(sys)
 sys.setdefaultencoding('utf-8')
@@ -86,11 +88,30 @@ def writeWinOrLoss2Json():
     with open('/Users/zidongceshi/code/mydota2/data/winOrloss.json','wb') as f:
         f.write(json.dumps(dict))
 
-def run():
-    writePlayPartyRate2Csv()
-    writeHeroPool2csv()
+def writeUserInfo2Json():
+    userInfo = {}
+    for k,v in friden.items():
+        userInfo[k] = {}
+        userInfo[k]['username'] = k
+        userInfo[k]['howmany'] = d2d.gethowManyGameDoYouPlay(v)
+        userInfo[k]['win'] = d2d.WinorLoss(v).count('win')
+        userInfo[k]['loss'] = d2d.WinorLoss(v).count('loss')
+        userInfo[k]['heropool'] = d2d.getHeroPool(v)
+        userInfo[k]['playparty'] = d2d.getPlayPartyWinorLoss(v)
+    dirPath = os.path.join(os.getcwd(),'data')
+    if not os.path.exists(dirPath):
+        os.mkdir(dirPath)
+    filePath = os.path.join(dirPath,time.strftime('%Y%m%d',time.localtime(time.time())))
+    filePath = filePath +'.json'
+    with open(filePath,'wb') as f:
+        f.write(json.dumps(userInfo))
 
+
+
+
+def run():
+    #writePlayPartyRate2Csv()
+    #writeHeroPool2csv()
+    writeUserInfo2Json()
 if __name__ == "__main__":
-    writePlayPartyRate2Json()
-    writeHeroPool2Json()
-    writeWinOrLoss2Json()
+    run()
