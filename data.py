@@ -43,7 +43,7 @@ def getHeroName(id):
     # else:
     #     name = heroId['heroes'][id-1]['localized_name']
 
-    for i in xrange(112):
+    for i in xrange(0,114):
         if (heroId['heroes'][i].has_key('id') and heroId['heroes'][i]['id'] == id):
             name = heroId['heroes'][i]['localized_name']
             return name
@@ -259,6 +259,7 @@ def getHeroPool(accountId):
         for y in xrange(0,len(player)):
             if int(accountId) == player[y]['account_id']:
                 heroName = getHeroName(player[y]['hero_id'])
+                heroName = cf.get('heroname',heroName)
                 if not heroPool.has_key(heroName):
                     heroPool[heroName] = [0,0]
                 heroPool[heroName][0] += 1
@@ -299,7 +300,7 @@ def getAvatarImg(accountId):
     f.close()
 
 '''
-
+获取最近七天跟你一起打过（队友或对手）的人的accountId
 '''
 def getPlayerId():
     accountIdList = []
@@ -333,44 +334,19 @@ def getFileName():
     pass
 
 
-
+'''
+下载最近七天队友或对手的头像到本地
+'''
 def downPlayerAvatarImg():
     accountId = getPlayerId()
     for i in accountId:
         getAvatarImg(i)
 
-
+def gethowManyGameDoYouPlay(accountId):
+    matchList = getMatchByLatest7Days(accountId)
+    return len(matchList)
 
 
 if __name__ == '__main__':
-    #获取7天内胜负场
-    # for k,v in friden.items():
-    #     temp = WinorLoss(v)
-    #     count = Counter(temp)
-    #     winTime = count['win']
-    #     lossTime = count['loss']
-    #     txt = "{0}在最近的7天内,你总共赢了:{1}场,输了:{2}场~~".format(k,winTime,lossTime)
-    #     print txt
-
-
-    #获取开黑胜负场
-    # getPlayPartyWinorLoss(123343610)
-    # for k,v in friden.items():
-    #     rateCount = getPlayPartyWinorLoss(v)
-    #     print '{0}:最近单排{1}次,胜{2}场.二人黑{3}次,胜{4}场.三个黑{5}次,胜{6}场.四人黑{7},胜{8}场,五人黑{9}次,胜{10}场'.format(k,rateCount['playparty'][0],rateCount['rate'][0],rateCount['playparty'][1],rateCount['rate'][1],rateCount['playparty'][2],rateCount['rate'][2],rateCount['playparty'][3],rateCount['rate'][3],rateCount['playparty'][4],rateCount['rate'][4])
-    #
-    # for k,v in friden.items():
-    #     result = whoisbiglag(v)
-    #     print result
-    # for k,v in friden.items():
-    #     heroPool = getHeroPool(v)
-    #     heroPool = sorted(heroPool.iteritems(),key=lambda d:d[1],reverse=True)
-    #     print '{0}最近玩了{1}个英雄'.format(k,len(heroPool))
-    #     for x in xrange(len(heroPool)):
-    #         print heroPool[x]
-    #     print '*'*30
-    #nickname = getPlayerNickname()
-    import wordcloud
-    import PIL
-    from wordcloud import WordCloud
+    l = [gethowManyGameDoYouPlay(v) for k,v in friden.items()]
     pass
