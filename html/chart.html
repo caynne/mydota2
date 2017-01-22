@@ -7,6 +7,7 @@
     <script src = 'jquery-3.1.1.min.js'></script>
 </head>
 <body>
+    <h2>Dota2报告</h2>
     <h1>
         <button type="button" id = 'ass'><img src="../avatar/jiji太大，裤裆装不下.jpg" style="width:90px" class="circle"></button>
         <button type="button" id = 'bear'><img src="../avatar/OB熊.jpg" style="width:90px" class="circle"></button>
@@ -14,10 +15,13 @@
         <button type="button" id = 'brave'><img src="../avatar/大白菜°.jpg" style="width:90px" class="circle"></button>
         <button type="button" id = 'man'><img src="../avatar/大神牛.jpg" style="width:90px" class="circle"></button>
         <button type="button" id = 'beard'><img src="../avatar/怼穿肠.jpg" style="width:90px" class="circle"></button>
+        <button type="button" id = 'monkye2'><img src="../avatar/There're%20%20trees,%20everywhere~.jpg" style="width:90px" class="circle"></button>
     </h1>
 
-    <div id = '1' style="width:600px; height:400px;"></div>
-    <div id = '2' style="width: 600px;height: 500px;"></div>
+
+        <div id = '1' style="width:750px; height:400px;" class="echart1"></div>
+        <h2>打了多少把</h2>
+        <div id = '2' style="width: 500px;height: 500px;" class ='echart2'></div>
 
     <style>
         .circle{
@@ -29,7 +33,6 @@
             border-color: #f8fff9;
             margin: 0px auto 5px auto;
         }
-
     </style>
 
     <script>
@@ -39,7 +42,7 @@
             var loss = []
             var win = []
             $.ajax({
-                url: '../data/20170120.json',
+                url: '../data/20170121.json',
                 type: 'GET',
                 dataType: 'json',
                 data: {},
@@ -88,6 +91,7 @@
                     },
                     yAxis: {
                         type:'value',
+                        interval: 1
                     },
                     series: [{
                         name: '胜',
@@ -124,7 +128,7 @@
             var loss = []
             var win = []
             $.ajax({
-                url: '../data/20170120.json',
+                url: '../data/20170121.json',
                 type: 'GET',
                 dataType: 'json',
                 data: {},
@@ -173,6 +177,7 @@
                     },
                     yAxis: {
                         type:'value',
+                        interval: 1
                     },
                     series: [{
                         name: '胜',
@@ -208,7 +213,7 @@
             var loss = []
             var win = []
             $.ajax({
-                url: '../data/20170120.json',
+                url: '../data/20170121.json',
                 type: 'GET',
                 dataType: 'json',
                 data: {},
@@ -257,6 +262,7 @@
                     },
                     yAxis: {
                         type:'value',
+                        interval: 1
                     },
                     series: [{
                         name: '胜',
@@ -292,7 +298,7 @@
             var loss = []
             var win = []
             $.ajax({
-                url: '../data/20170120.json',
+                url: '../data/20170121.json',
                 type: 'GET',
                 dataType: 'json',
                 data: {},
@@ -341,6 +347,7 @@
                     },
                     yAxis: {
                         type:'value',
+                        interval: 1
                     },
                     series: [{
                         name: '胜',
@@ -376,7 +383,7 @@
             var loss = []
             var win = []
             $.ajax({
-                url: '../data/20170120.json',
+                url: '../data/20170121.json',
                 type: 'GET',
                 dataType: 'json',
                 data: {},
@@ -425,6 +432,7 @@
                     },
                     yAxis: {
                         type:'value',
+                        interval: 1
                     },
                     series: [{
                         name: '胜',
@@ -460,7 +468,7 @@
             var loss = []
             var win = []
             $.ajax({
-                url: '../data/20170120.json',
+                url: '../data/20170121.json',
                 type: 'GET',
                 dataType: 'json',
                 data: {},
@@ -509,6 +517,93 @@
                     },
                     yAxis: {
                         type:'value',
+                        interval: 1,
+
+                    },
+                    series: [{
+                        name: '胜',
+                        type: 'bar',
+                        stack:'总量',
+                        label:{
+                            normal:{
+                                show:true,
+                                position:'insideBottomRight'
+                            }
+                        },
+                        data: win
+                    },{
+                        name:'负',
+                        type:'bar',
+                        stack:'总量',
+                        label:{
+                            normal:{
+                                show:true,
+                                position:'insideBottomRight'
+                            }
+                        },
+                        data:loss
+                    }
+                    ]
+                };
+            myChart.setOption(option);
+            })
+        })
+        $("#monkye2").click(function(event){
+            var account = 'ass'
+            var heroName = []
+            var loss = []
+            var win = []
+            $.ajax({
+                url: '../data/20170121.json',
+                type: 'GET',
+                dataType: 'json',
+                data: {},
+            }).done(function(data){
+                userInfo = data;
+                console.log('userinfo+username:'+userInfo[account]['heropool']);
+                //console.log('userinfo["ass"]'+userInfo['ass'][0]);
+                for (var i in userInfo[account]['heropool']){
+                    heroName.push(i)
+                }
+
+                for (var i=0;i < heroName.length;i++){
+                    loss.push(userInfo[account]['heropool'][heroName[i]][0]-userInfo[account]['heropool'][heroName[i]][1])
+                }
+                for (var i=0;i < heroName.length;i++){
+                    win.push(userInfo[account]['heropool'][heroName[i]][1])
+                }
+
+                var myChart = echarts.init(document.getElementById(1));
+                var option = {
+                    tooltip:{
+                        trigger:'axis',
+                        axisPointer:{
+                            type:'shadow'
+                        }
+                    },
+                    title: {
+                        text: account
+                    },
+
+                    legend: {
+                        data:['胜','负'],
+                        //data:['负'],
+                    },
+
+                    xAxis: {
+                        //data: ["蓝猫","小强","卡尔","上黑","船长","大鱼","小鱼",'哈',"逗"]
+                        data:heroName,
+                        scale:false,
+                        type:'category',
+                        axisLabel:{
+                            interval:0,
+                            //rotate:90
+                        }
+
+                    },
+                    yAxis: {
+                        type:'value',
+                        interval: 1
                     },
                     series: [{
                         name: '胜',
@@ -542,7 +637,7 @@
 
     <script>
         $.ajax({
-            url:'../data/20170120.json',
+            url:'../data/20170121.json',
             type:'GET',
             dataType:'json',
             data : {},
@@ -577,31 +672,16 @@
             option = {
                 backgroundColor: '#f4f2e3',
                 color: ['#85b6b2', '#6d4f8d', '#cd5e7e', '#e38980', '#f7db88'],
-                tooltip: {
-                show: true,
-                formatter: "{a} <br/>{b} : {c} ({d}%)"
-        },
+            tooltip:{
+                show:true,
+                trigger:'item',
+            },
             legend: {
                 itemGap: 12,
-                data: ['ass', 'bear', 'monkey', 'brave', 'man']
+                data: ['ass', 'bear', 'monkey', 'brave', 'man','bread']
             },
             toolbox: {
                 show: true,
-                feature: {
-                    mark: {
-                        show: true
-                    },
-                    dataView: {
-                        show: true,
-                        readOnly: false
-                    },
-                    restore: {
-                        show: true
-                    },
-                    saveAsImage: {
-                        show: true
-                    }
-                }
             },
         series: [{
                 name: 'ass ',
@@ -615,11 +695,10 @@
                         value: userInfo['ass']['howmany'],
                         name: 'ass'
                     }, {
-                        value: 10,
+                        value: 50,
                         name: 'invisible',
                         itemStyle: placeHolderStyle
                     }
-
                 ]
             }, {
                 name: 'bear',
@@ -665,12 +744,12 @@
                     value:  userInfo['brave']['howmany'],
                     name: 'brave'
                 }, {
-                    value: 30,
+                    value: 50,
                     name: 'invisible',
                     itemStyle: placeHolderStyle
                 }]
             }, {
-                name: 'man',
+                name: 'bread',
                 type: 'pie',
                 clockWise: false,
                 hoverAnimation: false,
@@ -681,7 +760,23 @@
                     value:  userInfo['man']['howmany'],
                     name: 'man'
                 }, {
-                    value: 30,
+                    value: 50,
+                    name: 'invisible',
+                    itemStyle: placeHolderStyle
+                }]
+        },{
+                name: 'bread',
+                type: 'pie',
+                clockWise: false,
+                hoverAnimation: false,
+                radius: [80, 100],
+                itemStyle: dataStyle,
+
+                data: [{
+                    value:  userInfo['beard']['howmany'],
+                    name: 'man'
+                }, {
+                    value: 50,
                     name: 'invisible',
                     itemStyle: placeHolderStyle
                 }]

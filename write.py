@@ -91,6 +91,7 @@ def writeWinOrLoss2Json():
 def writeUserInfo2Json():
     userInfo = {}
     for k,v in friden.items():
+        print k
         userInfo[k] = {}
         userInfo[k]['username'] = k
         userInfo[k]['howmany'] = d2d.gethowManyGameDoYouPlay(v)

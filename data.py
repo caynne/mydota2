@@ -348,5 +348,5 @@ def gethowManyGameDoYouPlay(accountId):
 
 
 if __name__ == '__main__':
-    l = [gethowManyGameDoYouPlay(v) for k,v in friden.items()]
+    getAvatarImg(friden['monkey2'])
     pass
