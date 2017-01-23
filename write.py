@@ -1,13 +1,18 @@
 #!/usr/bin/env python
 # encoding=utf-8
 
-import data as d2d
 import xlwt
 import json
 import codecs
 import sys
 import os
 import time
+import PIL
+from wordcloud import WordCloud
+import numpy as np
+import sys
+import data as d2d
+import matplotlib.pyplot as plt
 
 reload(sys)
 sys.setdefaultencoding('utf-8')
@@ -107,12 +112,36 @@ def writeUserInfo2Json():
     with open(filePath,'wb') as f:
         f.write(json.dumps(userInfo))
 
+#生成最近对队对手昵称的词云图
+def worldcloud():
+    nickname = d2d.getPlayerNickname()
+    strNickName = ' '.join(nickname)
+    dirPath = os.path.join(os.getcwd(),'data')
+    if not os.path.exists(dirPath):
+        os.mkdir(dirPath)
+    filePath = os.path.join(dirPath,'nickname.png')
+    wordcloud = WordCloud(font_path='/Users/zidongceshi/code/mydota2/'+'MSYH.TTF',
+                          background_color='white',
+                          width=800,
+                          height=600,
+                          #margin=1,
+                          #mask=alice_mask,
+                          max_words=2000,
+                          max_font_size=60,
+                          random_state=42)
+    wordcloud = wordcloud.generate(strNickName)
+    plt.imshow(wordcloud)
+    plt.axis('off')
+    #plt.show()
+    plt.savefig(filePath)
+
 
 
 
 def run():
     #writePlayPartyRate2Csv()
     #writeHeroPool2csv()
-    writeUserInfo2Json()
+    #writeUserInfo2Json()
+    worldcloud()
 if __name__ == "__main__":
     run()

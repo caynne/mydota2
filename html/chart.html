@@ -7,7 +7,16 @@
     <script src = 'jquery-3.1.1.min.js'></script>
 </head>
 <body>
-    <h2>Dota2报告</h2>
+    <h3>Dota2报告</h3>
+    <h3>点击各自头像后查看战绩</h3>
+    <p>
+        今天总共打了
+        <span id="howmany"></span>
+        把,胜:
+        <span id = "win"></span>
+        负:
+        <span id = "loss"></span>
+    </p>
     <h1>
         <button type="button" id = 'ass'><img src="../avatar/jiji太大，裤裆装不下.jpg" style="width:90px" class="circle"></button>
         <button type="button" id = 'bear'><img src="../avatar/OB熊.jpg" style="width:90px" class="circle"></button>
@@ -20,6 +29,8 @@
 
 
         <div id = '1' style="width:750px; height:400px;" class="echart1"></div>
+        <h4>这些是你们的对友跟队手的昵称,还记得多少?</h4>
+        <div><img src="../data/nickname.png" alt=""></div>
         <h2>打了多少把</h2>
         <div id = '2' style="width: 500px;height: 500px;" class ='echart2'></div>
 
@@ -48,6 +59,9 @@
                 data: {},
             }).done(function(data){
                 userInfo = data;
+                $("#howmany").text(userInfo[account]['howmany'])
+                $("#win").text(userInfo[account]['win'])
+                $("#loss").text(userInfo[account]['loss'])
                 console.log('userinfo+username:'+userInfo[account]['heropool']);
                 //console.log('userinfo["ass"]'+userInfo['ass'][0]);
                 for (var i in userInfo[account]['heropool']){
@@ -135,6 +149,9 @@
             }).done(function(data){
                 userInfo = data;
                 console.log('userinfo+username:'+userInfo[account]['heropool']);
+                $("#howmany").text(userInfo[account]['howmany'])
+                $("#win").text(userInfo[account]['win'])
+                $("#loss").text(userInfo[account]['loss'])
                 //console.log('userinfo["ass"]'+userInfo['ass'][0]);
                 for (var i in userInfo[account]['heropool']){
                     heroName.push(i)
@@ -219,6 +236,9 @@
                 data: {},
             }).done(function(data){
                 userInfo = data;
+                $("#howmany").text(userInfo[account]['howmany'])
+                $("#win").text(userInfo[account]['win'])
+                $("#loss").text(userInfo[account]['loss'])
                 console.log('userinfo+username:'+userInfo[account]['heropool']);
                 //console.log('userinfo["ass"]'+userInfo['ass'][0]);
                 for (var i in userInfo[account]['heropool']){
@@ -304,6 +324,9 @@
                 data: {},
             }).done(function(data){
                 userInfo = data;
+                $("#howmany").text(userInfo[account]['howmany'])
+                $("#win").text(userInfo[account]['win'])
+                $("#loss").text(userInfo[account]['loss'])
                 console.log('userinfo+username:'+userInfo[account]['heropool']);
                 //console.log('userinfo["ass"]'+userInfo['ass'][0]);
                 for (var i in userInfo[account]['heropool']){
@@ -389,6 +412,9 @@
                 data: {},
             }).done(function(data){
                 userInfo = data;
+                $("#howmany").text(userInfo[account]['howmany'])
+                $("#win").text(userInfo[account]['win'])
+                $("#loss").text(userInfo[account]['loss'])
                 console.log('userinfo+username:'+userInfo[account]['heropool']);
                 //console.log('userinfo["ass"]'+userInfo['ass'][0]);
                 for (var i in userInfo[account]['heropool']){
@@ -474,6 +500,9 @@
                 data: {},
             }).done(function(data){
                 userInfo = data;
+                $("#howmany").text(userInfo[account]['howmany'])
+                $("#win").text(userInfo[account]['win'])
+                $("#loss").text(userInfo[account]['loss'])
                 console.log('userinfo+username:'+userInfo[account]['heropool']);
                 //console.log('userinfo["ass"]'+userInfo['ass'][0]);
                 for (var i in userInfo[account]['heropool']){
@@ -560,6 +589,9 @@
                 data: {},
             }).done(function(data){
                 userInfo = data;
+                $("#howmany").text(userInfo[account]['howmany'])
+                $("#win").text(userInfo[account]['win'])
+                $("#loss").text(userInfo[account]['loss'])
                 console.log('userinfo+username:'+userInfo[account]['heropool']);
                 //console.log('userinfo["ass"]'+userInfo['ass'][0]);
                 for (var i in userInfo[account]['heropool']){
