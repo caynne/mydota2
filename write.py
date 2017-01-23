@@ -120,7 +120,7 @@ def worldcloud():
     if not os.path.exists(dirPath):
         os.mkdir(dirPath)
     filePath = os.path.join(dirPath,'nickname.png')
-    wordcloud = WordCloud(font_path='/Users/zidongceshi/code/mydota2/'+'MSYH.TTF',
+    wordcloud = WordCloud(font_path='F:\code\mydota2\msyh.ttc',
                           background_color='white',
                           width=800,
                           height=600,
@@ -135,13 +135,32 @@ def worldcloud():
     #plt.show()
     plt.savefig(filePath)
 
-
+def writeMatchDetail2Json():
+    matchDetail = {}
+    for k,v in friden.items():
+        matchId = []
+        matchDetails = []
+        print k
+        matchList = d2d.getMatchByLatest7Days(v)
+        for x in xrange(0,len(matchList)):
+            matchId.append(matchList[x]['match_id'])
+        for id in matchId:
+             matchDetails.append(d2d.getMatchDetailInfo(v,id))
+        matchDetail[k] = matchDetails
+    dirPath = os.path.join(os.getcwd(),'data')
+    if not os.path.exists(dirPath):
+        os.mkdir(dirPath)
+    filePath = os.path.join(dirPath,time.strftime('%Y%m%d',time.localtime(time.time()))+'matchdetail')
+    filePath = filePath +'.json'
+    with open(filePath,'wb') as f:
+        f.write(json.dumps(matchDetail))
 
 
 def run():
     #writePlayPartyRate2Csv()
     #writeHeroPool2csv()
     #writeUserInfo2Json()
-    worldcloud()
+    #worldcloud()
+    writeMatchDetail2Json()
 if __name__ == "__main__":
     run()

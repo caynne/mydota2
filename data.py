@@ -346,7 +346,24 @@ def gethowManyGameDoYouPlay(accountId):
     matchList = getMatchByLatest7Days(accountId)
     return len(matchList)
 
+def getMatchDetailInfo(accountId,matchId):
+    matchDetail = []
+    detail = api.get_match_details(matchId)
+    x = time.localtime(detail['start_time'])
+    starttime = time.strftime('%H:%M',x)
+    for j in xrange(0,len(detail['players'])):
+        if accountId == detail['players'][j]['account_id']:
+            heroName = cf.get('heroname',detail['players'][j]['hero_name'])
+            kills = detail['players'][j]['kills']
+            death = detail['players'][j]['deaths']
+            assist = detail['players'][j]['assists']
+            lastHit = detail['players'][j]['last_hits']
+            xpm = detail['players'][j]['xp_per_min']
+            gpm = detail['players'][j]['gold_per_min']
+            matchDetail = [starttime,heroName,kills,death,assist,lastHit,xpm,gpm]
+            break
+    return matchDetail
 
 if __name__ == '__main__':
-    getAvatarImg(friden['brave'])
+    getMatchDetailInfo(friden['beard'],2929096086)
     pass
