@@ -350,7 +350,7 @@ def getMatchDetailInfo(accountId,matchId):
     matchDetail = []
     detail = api.get_match_details(matchId)
     x = time.localtime(detail['start_time'])
-    starttime = time.strftime('%H:%M',x)
+    starttime = time.strftime('%H.%M',x)
     for j in xrange(0,len(detail['players'])):
         if accountId == detail['players'][j]['account_id']:
             heroName = cf.get('heroname',detail['players'][j]['hero_name'])
@@ -360,7 +360,7 @@ def getMatchDetailInfo(accountId,matchId):
             lastHit = detail['players'][j]['last_hits']
             xpm = detail['players'][j]['xp_per_min']
             gpm = detail['players'][j]['gold_per_min']
-            matchDetail = [starttime,heroName,kills,death,assist,lastHit,xpm,gpm]
+            matchDetail = [float(starttime),kills,death,assist,lastHit,xpm,gpm,heroName,]
             break
     return matchDetail
 
