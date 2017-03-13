@@ -6,11 +6,11 @@
     <script src = 'echarts.min.js'></script>
     <script src = 'jquery-3.1.1.min.js'></script>
 </head>
-<body>
+<>
     <h3>Dota2报告</h3>
     <h3>点击各自头像后查看战绩</h3>
     <p>
-        今天总共打了
+        最近总共打了
         <span id="howmany"></span>
         把,胜:
         <span id = "win"></span>
@@ -28,12 +28,15 @@
     </h1>
 
 
-    <div id = '1' style="width:750px; height:400px;" class="echart1"></div>
+    <div id = '1' style="width:1050px; height:400px;" class="echart1"></div>
+    <div id = '4' style="width:1050px; height:400px;" class="echart1"></div>
+
     <h4>这些是你们的对友跟队手的昵称,还记得多少?</h4>
     <div><img src="../data/nickname.png" alt=""></div>
     <h2>打了多少把</h2>
     <div id = '2' style="width: 500px;height: 500px;" class ='echart2'></div>
-    <div id = '3' style="width:950px; height:400px;" class="echart3"></div>
+    <div id = '3' style="width:1250px; height:400px;" class="echart3"></div>
+
 
 
     <style>
@@ -54,7 +57,7 @@
             var loss = []
             var win = []
             $.ajax({
-                url: '../data/20170121.json',
+                url: '../data/20170313.json',
                 type: 'GET',
                 dataType: 'json',
                 data: {},
@@ -64,6 +67,170 @@
                 $("#win").text(userInfo[account]['win'])
                 $("#loss").text(userInfo[account]['loss'])
                 console.log('userinfo+username:'+userInfo[account]['heropool']);
+                //console.log('userinfo["ass"]'+userInfo['ass'][0]);
+                for (var i in userInfo[account]['heropool']){
+                    heroName.push(i)
+                }
+
+                for (var i=0;i < heroName.length;i++){
+                    loss.push(userInfo[account]['heropool'][heroName[i]][0]-userInfo[account]['heropool'][heroName[i]][1])
+                }
+                for (var i=0;i < heroName.length;i++){
+                    win.push(userInfo[account]['heropool'][heroName[i]][1])
+                }
+
+                var myChart = echarts.init(document.getElementById(1));
+                var option = {
+                    tooltip:{
+                        trigger:'axis',
+                        axisPointer:{
+                            type:'shadow'
+                        }
+                    },
+                    title: {
+                        text: account
+                    },
+
+                    legend: {
+                        data:['胜','负'],
+                        //data:['负'],
+                    },
+
+                    xAxis: {
+                        data:heroName,
+                        scale:false,
+                        type:'category',
+                        axisLabel:{
+                            interval:0,
+                            //rotate:90
+                        }
+
+                    },
+                    yAxis: {
+                        type:'value',
+                        interval: 1
+                    },
+                    series: [{
+                        name: '胜',
+                        type: 'bar',
+                        stack:'总量',
+                        label:{
+                            normal:{
+                                show:true,
+                                position:'insideBottomRight'
+                            }
+                        },
+                        data: win
+                    },{
+                        name:'负',
+                        type:'bar',
+                        stack:'总量',
+                        label:{
+                            normal:{
+                                show:true,
+                                position:'insideBottomRight'
+                            }
+                        },
+                        data:loss
+                    }
+                    ]
+                };
+            myChart.setOption(option);
+            })
+        })
+        $("#ass").click(function(event){
+            var account = 'ass'
+            var rate = []
+            var win = []
+            var loss = []
+            $.ajax({
+                url: '../data/20170313PlayPartyDetail.json',
+                type: 'GET',
+                dataType: 'json',
+                data: {},
+            }).done(function(data){
+                playPartyDetail = data;
+                rate = playPartyDetail[account]['playparty'];
+                win = playPartyDetail[account]['rate']
+                for (var i=0;i < rate.length;i++){
+                    loss.push(rate[i]-win[i])
+                }
+                var myChart = echarts.init(document.getElementById(4));
+                var option = {
+                    tooltip:{
+                        trigger:'axis',
+                        axisPointer:{
+                            type:'shadow'
+                        }
+                    },
+                    title: {
+                        text: account
+                    },
+
+                    legend: {
+                        data:['胜','负'],
+                        //data:['负'],
+                    },
+
+                    xAxis: {
+                        data:['单排','二人黑','三人黑','四人黑','五人黑'],
+                        scale:false,
+                        type:'category',
+                        axisLabel:{
+                            interval:0,
+                            //rotate:90
+                        }
+
+                    },
+                    yAxis: {
+                        type:'value',
+                        interval: 1
+                    },
+                    series: [{
+                        name: '胜',
+                        type: 'bar',
+                        stack:'总量',
+                        label:{
+                            normal:{
+                                show:true,
+                                position:'insideBottomRight'
+                            }
+                        },
+                        data: win
+                    },{
+                        name:'负',
+                        type:'bar',
+                        stack:'总量',
+                        label:{
+                            normal:{
+                                show:true,
+                                position:'insideBottomRight'
+                            }
+                        },
+                        data:loss
+                    }
+                    ]
+                };
+            myChart.setOption(option);
+            })
+        })
+
+        $("#bear").click(function(event){
+            var account = 'bear'
+            var heroName = []
+            var loss = []
+            var win = []
+            $.ajax({
+                url: '../data/20170313.json',
+                type: 'GET',
+                dataType: 'json',
+                data: {},
+            }).done(function(data){
+                userInfo = data;
+                console.log('userinfo+username:'+userInfo[account]['heropool']);
+                $("#howmany").text(userInfo[account]['howmany'])
+                $("#win").text(userInfo[account]['win'])
+                $("#loss").text(userInfo[account]['loss'])
                 //console.log('userinfo["ass"]'+userInfo['ass'][0]);
                 for (var i in userInfo[account]['heropool']){
                     heroName.push(i)
@@ -136,23 +303,99 @@
             myChart.setOption(option);
             })
         })
-
         $("#bear").click(function(event){
             var account = 'bear'
+            var rate = []
+            var win = []
+            var loss = []
+            $.ajax({
+                url: '../data/20170313PlayPartyDetail.json',
+                type: 'GET',
+                dataType: 'json',
+                data: {},
+            }).done(function(data){
+                playPartyDetail = data;
+                rate = playPartyDetail[account]['playparty'];
+                win = playPartyDetail[account]['rate']
+                for (var i=0;i < rate.length;i++){
+                    loss.push(rate[i]-win[i])
+                }
+                var myChart = echarts.init(document.getElementById(4));
+                var option = {
+                    tooltip:{
+                        trigger:'axis',
+                        axisPointer:{
+                            type:'shadow'
+                        }
+                    },
+                    title: {
+                        text: account
+                    },
+
+                    legend: {
+                        data:['胜','负'],
+                        //data:['负'],
+                    },
+
+                    xAxis: {
+                        data:['单排','二人黑','三人黑','四人黑','五人黑'],
+                        scale:false,
+                        type:'category',
+                        axisLabel:{
+                            interval:0,
+                            //rotate:90
+                        }
+
+                    },
+                    yAxis: {
+                        type:'value',
+                        interval: 1
+                    },
+                    series: [{
+                        name: '胜',
+                        type: 'bar',
+                        stack:'总量',
+                        label:{
+                            normal:{
+                                show:true,
+                                position:'insideBottomRight'
+                            }
+                        },
+                        data: win
+                    },{
+                        name:'负',
+                        type:'bar',
+                        stack:'总量',
+                        label:{
+                            normal:{
+                                show:true,
+                                position:'insideBottomRight'
+                            }
+                        },
+                        data:loss
+                    }
+                    ]
+                };
+            myChart.setOption(option);
+            })
+        })
+
+        $("#monkey").click(function(event){
+            var account = 'monkey'
             var heroName = []
             var loss = []
             var win = []
             $.ajax({
-                url: '../data/20170121.json',
+                url: '../data/20170313.json',
                 type: 'GET',
                 dataType: 'json',
                 data: {},
             }).done(function(data){
                 userInfo = data;
-                console.log('userinfo+username:'+userInfo[account]['heropool']);
                 $("#howmany").text(userInfo[account]['howmany'])
                 $("#win").text(userInfo[account]['win'])
                 $("#loss").text(userInfo[account]['loss'])
+                console.log('userinfo+username:'+userInfo[account]['heropool']);
                 //console.log('userinfo["ass"]'+userInfo['ass'][0]);
                 for (var i in userInfo[account]['heropool']){
                     heroName.push(i)
@@ -227,11 +470,88 @@
         })
         $("#monkey").click(function(event){
             var account = 'monkey'
+            var rate = []
+            var win = []
+            var loss = []
+            $.ajax({
+                url: '../data/20170313PlayPartyDetail.json',
+                type: 'GET',
+                dataType: 'json',
+                data: {},
+            }).done(function(data){
+                playPartyDetail = data;
+                rate = playPartyDetail[account]['playparty'];
+                win = playPartyDetail[account]['rate']
+                for (var i=0;i < rate.length;i++){
+                    loss.push(rate[i]-win[i])
+                }
+                var myChart = echarts.init(document.getElementById(4));
+                var option = {
+                    tooltip:{
+                        trigger:'axis',
+                        axisPointer:{
+                            type:'shadow'
+                        }
+                    },
+                    title: {
+                        text: account
+                    },
+
+                    legend: {
+                        data:['胜','负'],
+                        //data:['负'],
+                    },
+
+                    xAxis: {
+                        data:['单排','二人黑','三人黑','四人黑','五人黑'],
+                        scale:false,
+                        type:'category',
+                        axisLabel:{
+                            interval:0,
+                            //rotate:90
+                        }
+
+                    },
+                    yAxis: {
+                        type:'value',
+                        interval: 1
+                    },
+                    series: [{
+                        name: '胜',
+                        type: 'bar',
+                        stack:'总量',
+                        label:{
+                            normal:{
+                                show:true,
+                                position:'insideBottomRight'
+                            }
+                        },
+                        data: win
+                    },{
+                        name:'负',
+                        type:'bar',
+                        stack:'总量',
+                        label:{
+                            normal:{
+                                show:true,
+                                position:'insideBottomRight'
+                            }
+                        },
+                        data:loss
+                    }
+                    ]
+                };
+            myChart.setOption(option);
+            })
+        })
+
+        $("#brave").click(function(event){
+            var account = 'brave'
             var heroName = []
             var loss = []
             var win = []
             $.ajax({
-                url: '../data/20170121.json',
+                url: '../data/20170313.json',
                 type: 'GET',
                 dataType: 'json',
                 data: {},
@@ -315,11 +635,88 @@
         })
         $("#brave").click(function(event){
             var account = 'brave'
+            var rate = []
+            var win = []
+            var loss = []
+            $.ajax({
+                url: '../data/20170313PlayPartyDetail.json',
+                type: 'GET',
+                dataType: 'json',
+                data: {},
+            }).done(function(data){
+                playPartyDetail = data;
+                rate = playPartyDetail[account]['playparty'];
+                win = playPartyDetail[account]['rate']
+                for (var i=0;i < rate.length;i++){
+                    loss.push(rate[i]-win[i])
+                }
+                var myChart = echarts.init(document.getElementById(4));
+                var option = {
+                    tooltip:{
+                        trigger:'axis',
+                        axisPointer:{
+                            type:'shadow'
+                        }
+                    },
+                    title: {
+                        text: account
+                    },
+
+                    legend: {
+                        data:['胜','负'],
+                        //data:['负'],
+                    },
+
+                    xAxis: {
+                        data:['单排','二人黑','三人黑','四人黑','五人黑'],
+                        scale:false,
+                        type:'category',
+                        axisLabel:{
+                            interval:0,
+                            //rotate:90
+                        }
+
+                    },
+                    yAxis: {
+                        type:'value',
+                        interval: 1
+                    },
+                    series: [{
+                        name: '胜',
+                        type: 'bar',
+                        stack:'总量',
+                        label:{
+                            normal:{
+                                show:true,
+                                position:'insideBottomRight'
+                            }
+                        },
+                        data: win
+                    },{
+                        name:'负',
+                        type:'bar',
+                        stack:'总量',
+                        label:{
+                            normal:{
+                                show:true,
+                                position:'insideBottomRight'
+                            }
+                        },
+                        data:loss
+                    }
+                    ]
+                };
+            myChart.setOption(option);
+            })
+        })
+
+        $("#man").click(function(event){
+            var account = 'man'
             var heroName = []
             var loss = []
             var win = []
             $.ajax({
-                url: '../data/20170121.json',
+                url: '../data/20170313.json',
                 type: 'GET',
                 dataType: 'json',
                 data: {},
@@ -403,33 +800,22 @@
         })
         $("#man").click(function(event){
             var account = 'man'
-            var heroName = []
-            var loss = []
+            var rate = []
             var win = []
+            var loss = []
             $.ajax({
-                url: '../data/20170121.json',
+                url: '../data/20170313PlayPartyDetail.json',
                 type: 'GET',
                 dataType: 'json',
                 data: {},
             }).done(function(data){
-                userInfo = data;
-                $("#howmany").text(userInfo[account]['howmany'])
-                $("#win").text(userInfo[account]['win'])
-                $("#loss").text(userInfo[account]['loss'])
-                console.log('userinfo+username:'+userInfo[account]['heropool']);
-                //console.log('userinfo["ass"]'+userInfo['ass'][0]);
-                for (var i in userInfo[account]['heropool']){
-                    heroName.push(i)
+                playPartyDetail = data;
+                rate = playPartyDetail[account]['playparty'];
+                win = playPartyDetail[account]['rate']
+                for (var i=0;i < rate.length;i++){
+                    loss.push(rate[i]-win[i])
                 }
-
-                for (var i=0;i < heroName.length;i++){
-                    loss.push(userInfo[account]['heropool'][heroName[i]][0]-userInfo[account]['heropool'][heroName[i]][1])
-                }
-                for (var i=0;i < heroName.length;i++){
-                    win.push(userInfo[account]['heropool'][heroName[i]][1])
-                }
-
-                var myChart = echarts.init(document.getElementById(1));
+                var myChart = echarts.init(document.getElementById(4));
                 var option = {
                     tooltip:{
                         trigger:'axis',
@@ -447,8 +833,7 @@
                     },
 
                     xAxis: {
-                        //data: ["蓝猫","小强","卡尔","上黑","船长","大鱼","小鱼",'哈',"逗"]
-                        data:heroName,
+                        data:['单排','二人黑','三人黑','四人黑','五人黑'],
                         scale:false,
                         type:'category',
                         axisLabel:{
@@ -489,13 +874,14 @@
             myChart.setOption(option);
             })
         })
+
         $("#beard").click(function(event){
             var account = 'beard'
             var heroName = []
             var loss = []
             var win = []
             $.ajax({
-                url: '../data/20170121.json',
+                url: '../data/20170313.json',
                 type: 'GET',
                 dataType: 'json',
                 data: {},
@@ -578,13 +964,90 @@
             myChart.setOption(option);
             })
         })
+
+        $("#beard").click(function(event){
+            var account = 'beard'
+            var rate = []
+            var win = []
+            var loss = []
+            $.ajax({
+                url: '../data/20170313PlayPartyDetail.json',
+                type: 'GET',
+                dataType: 'json',
+                data: {},
+            }).done(function(data){
+                playPartyDetail = data;
+                rate = playPartyDetail[account]['playparty'];
+                win = playPartyDetail[account]['rate']
+                for (var i=0;i < rate.length;i++){
+                    loss.push(rate[i]-win[i])
+                }
+                var myChart = echarts.init(document.getElementById(4));
+                var option = {
+                    tooltip:{
+                        trigger:'axis',
+                        axisPointer:{
+                            type:'shadow'
+                        }
+                    },
+                    title: {
+                        text: account
+                    },
+
+                    legend: {
+                        data:['胜','负'],
+                        //data:['负'],
+                    },
+
+                    xAxis: {
+                        data:['单排','二人黑','三人黑','四人黑','五人黑'],
+                        scale:false,
+                        type:'category',
+                        axisLabel:{
+                            interval:0,
+                            //rotate:90
+                        }
+
+                    },
+                    yAxis: {
+                        type:'value',
+                        interval: 1
+                    },
+                    series: [{
+                        name: '胜',
+                        type: 'bar',
+                        stack:'总量',
+                        label:{
+                            normal:{
+                                show:true,
+                                position:'insideBottomRight'
+                            }
+                        },
+                        data: win
+                    },{
+                        name:'负',
+                        type:'bar',
+                        stack:'总量',
+                        label:{
+                            normal:{
+                                show:true,
+                                position:'insideBottomRight'
+                            }
+                        },
+                        data:loss
+                    }
+                    ]
+                };
+            myChart.setOption(option);
+            })
+        })
         $("#monkye2").click(function(event){
             var account = 'monkey2'
             var heroName = []
             var loss = []
             var win = []
             $.ajax({
-                url: '../data/20170121.json',
+                url: '../data/20170313.json',
                 type: 'GET',
                 dataType: 'json',
                 data: {},
@@ -666,11 +1129,88 @@
             myChart.setOption(option);
             })
         })
+        $("#monkye2").click(function(event){
+            var account = 'monkey2'
+            var rate = []
+            var win = []
+            var loss = []
+            $.ajax({
+                url: '../data/20170313PlayPartyDetail.json',
+                type: 'GET',
+                dataType: 'json',
+                data: {},
+            }).done(function(data){
+                playPartyDetail = data;
+                rate = playPartyDetail[account]['playparty'];
+                win = playPartyDetail[account]['rate']
+                for (var i=0;i < rate.length;i++){
+                    loss.push(rate[i]-win[i])
+                }
+                var myChart = echarts.init(document.getElementById(4));
+                var option = {
+                    tooltip:{
+                        trigger:'axis',
+                        axisPointer:{
+                            type:'shadow'
+                        }
+                    },
+                    title: {
+                        text: account
+                    },
+
+                    legend: {
+                        data:['胜','负'],
+                        //data:['负'],
+                    },
+
+                    xAxis: {
+                        data:['单排','二人黑','三人黑','四人黑','五人黑'],
+                        scale:false,
+                        type:'category',
+                        axisLabel:{
+                            interval:0,
+                            //rotate:90
+                        }
+
+                    },
+                    yAxis: {
+                        type:'value',
+                        interval: 1
+                    },
+                    series: [{
+                        name: '胜',
+                        type: 'bar',
+                        stack:'总量',
+                        label:{
+                            normal:{
+                                show:true,
+                                position:'insideBottomRight'
+                            }
+                        },
+                        data: win
+                    },{
+                        name:'负',
+                        type:'bar',
+                        stack:'总量',
+                        label:{
+                            normal:{
+                                show:true,
+                                position:'insideBottomRight'
+                            }
+                        },
+                        data:loss
+                    }
+                    ]
+                };
+            myChart.setOption(option);
+            })
+        })
+
     </script>
 
     <script>
         $.ajax({
-            url:'../data/20170121.json',
+            url:'../data/20170313.json',
             type:'GET',
             dataType:'json',
             data : {},
@@ -824,7 +1364,7 @@
 
     <script>
         $.ajax({
-            url:'../data/20170124matchdetail.json',
+            url:'../data/20170313matchdetail.json',
             type:'GET',
             dataType:'json',
             data : {},
@@ -872,11 +1412,12 @@
                 },
                 backgroundColor: '#404a59',
                 color: [
-                '#dd4444', '#fec42c', '#80F1BE'
+                '#dd4444', '#fec42c', '#80F1BE','#0F20FF','#DD0BFF','#030203','#19FF3D'
                 ],
+
                 legend: {
                     y: 'top',
-                    data: ['bear', 'brave', 'monkey2'],
+                    data: ['bear', 'brave', 'monkey2','man','ass','beard','monkey'],
                     textStyle: {
                         color: '#fff',
                         fontSize: 16
@@ -988,19 +1529,120 @@
                     type: 'scatter',
                     itemStyle: itemStyle,
                     data: dataBear,
+                     label:{
+                            normal:{
+                                show:true,
+                                position:'inside',
+                                formatter:function(obj){
+                                    var value = obj.value;
+                                    return value[7]
+                                },
+                                fontSize:5
+                            }
+                     },
                 },
                 {
                     name: 'brave',
                     type: 'scatter',
                     itemStyle: itemStyle,
                     data: dataBrave,
+                    label:{
+                            normal:{
+                                show:true,
+                                position:'inside',
+                                formatter:function(obj){
+                                    var value = obj.value;
+                                    return value[7]
+                                },
+                                fontSize:5
+                            }
+                     },
 
                 },
+//                {
+//                    name: 'monkey2',
+//                    type: 'scatter',
+//                    itemStyle: itemStyle,
+//                    data: dataMonkey2,
+//                    label:{
+//                            normal:{
+//                                show:true,
+//                                position:'inside',
+//                                formatter:function(obj){
+//                                    var value = obj.value;
+//                                    return value[7]
+//                                },
+//                                fontSize:5
+//                            }
+//                     },
+//                },
                 {
-                    name: 'monkey2',
+                    name: 'ass',
                     type: 'scatter',
                     itemStyle: itemStyle,
-                    data: dataMonkey2,
+                    data: dataAss,
+                    label:{
+                            normal:{
+                                show:true,
+                                position:'inside',
+                                formatter:function(obj){
+                                    var value = obj.value;
+                                    return value[7]
+                                },
+                                fontSize:5
+                            }
+                     },
+                },
+//                {
+//                    name: 'man',
+//                    type: 'scatter',
+//                    itemStyle: itemStyle,
+//                    data: dataMan,
+//                    label:{
+//                            normal:{
+//                                show:true,
+//                                position:'inside',
+//                                formatter:function(obj){
+//                                    var value = obj.value;
+//                                    return value[7]
+//                                },
+//                                fontSize:5
+//                            }
+//                     },
+//                },
+//                {
+//                    name: 'beard',
+//                    type: 'scatter',
+//                    itemStyle: itemStyle,
+//                    data: dataBeard,
+//                    label:{
+//                            normal:{
+//                                show:true,
+//                                position:'inside',
+//                                formatter:function(obj){
+//                                    var value = obj.value;
+//                                    return value[7]
+//                                },
+//                                fontSize:5
+//                            }
+//                     },
+//                },
+                {
+                    name: 'monkey',
+                    type: 'scatter',
+                    itemStyle: itemStyle,
+                    data: dataMonkey,
+                    label:{
+                            normal:{
+                                show:true,
+                                position:'inside',
+                                formatter:function(obj){
+                                    var value = obj.value;
+                                    return value[7]
+                                },
+                                fontSize:5
+                            }
+                     },
                 }
             ]
         };

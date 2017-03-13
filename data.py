@@ -353,7 +353,10 @@ def getMatchDetailInfo(accountId,matchId):
     starttime = time.strftime('%H.%M',x)
     for j in xrange(0,len(detail['players'])):
         if accountId == detail['players'][j]['account_id']:
-            heroName = cf.get('heroname',detail['players'][j]['hero_name'])
+            try:
+                heroName = cf.get('heroname',detail['players'][j]['hero_name'])
+            except:
+                continue
             kills = detail['players'][j]['kills']
             death = detail['players'][j]['deaths']
             assist = detail['players'][j]['assists']
@@ -365,5 +368,5 @@ def getMatchDetailInfo(accountId,matchId):
     return matchDetail
 
 if __name__ == '__main__':
-    getMatchDetailInfo(friden['beard'],2929096086)
+    getAvatarImg(friden['beard'])
     pass

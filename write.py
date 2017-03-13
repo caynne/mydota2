@@ -17,7 +17,7 @@ import matplotlib.pyplot as plt
 reload(sys)
 sys.setdefaultencoding('utf-8')
 
-friden = {"brave":169478997,"bear":337190674,"monkey":131173904,"man":284155258,"beard":245587068,"ass":123343610,'monkey2':336778995}
+friden = {"brave":169478997,"bear":337190674,"monkey":131173904,"man":284155258,"beard":245587068,'''"ass":123343610,''''monkey2':336778995}
 
 def writeHeroPool2csv():
     wb = xlwt.Workbook()
@@ -120,7 +120,7 @@ def worldcloud():
     if not os.path.exists(dirPath):
         os.mkdir(dirPath)
     filePath = os.path.join(dirPath,'nickname.png')
-    wordcloud = WordCloud(font_path='F:\code\mydota2\msyh.ttc',
+    wordcloud = WordCloud(font_path='/Users/zidongceshi/code/mydota2/MSYH.TTF',
                           background_color='white',
                           width=800,
                           height=600,
@@ -155,12 +155,26 @@ def writeMatchDetail2Json():
     with open(filePath,'wb') as f:
         f.write(json.dumps(matchDetail))
 
+def writePlayPartyDetail2Json():
+    playPartyDetail = {}
+    for k,v in friden.items():
+        print k
+        playPartyDetail[k] = d2d.getPlayPartyWinorLoss(v)
+    dirPath = os.path.join(os.getcwd(),'data')
+    if not os.path.exists(dirPath):
+        os.mkdir(dirPath)
+    filePath = os.path.join(dirPath,time.strftime('%Y%m%d',time.localtime(time.time()))+'PlayPartyDetail')
+    filePath = filePath +'.json'
+    with open(filePath,'wb') as f:
+        f.write(json.dumps(playPartyDetail))
 
 def run():
     #writePlayPartyRate2Csv()
     #writeHeroPool2csv()
-    #writeUserInfo2Json()
+    writeUserInfo2Json()
     #worldcloud()
-    writeMatchDetail2Json()
+    #writeMatchDetail2Json()
+    writePlayPartyDetail2Json()
+
 if __name__ == "__main__":
     run()
