@@ -13,11 +13,15 @@ import numpy as np
 import sys
 import data as d2d
 import matplotlib.pyplot as plt
+import conn
 
 reload(sys)
 sys.setdefaultencoding('utf-8')
 
-friden = {"brave":169478997,"bear":337190674,"monkey":131173904,"man":284155258,"beard":245587068,'''"ass":123343610,''''monkey2':336778995}
+friden = {"brave":169478997,"bear":337190674,"monkey":131173904,"man":284155258,"beard":245587068,'monkey2':336778995}
+
+conn = conn.connDB()
+cursor = conn.cursor()
 
 def writeHeroPool2csv():
     wb = xlwt.Workbook()
@@ -94,10 +98,32 @@ def writeWinOrLoss2Json():
         f.write(json.dumps(dict))
 
 def writeUserInfo2Json():
-    userInfo = {}
+    userInfo = {} #最终返回字典,存放想要的数据
+    #sql语句用来查询,时间维度:月,指标:场次,胜,胜率
+    sql = "select ap.accountid as 'uid',a.nickname,from_unixtime(md.`startTime`,'%Y-%m') as '月份',count(ap.accountid) as'场次',sum(ap.winorloss) as'赢' ,sum(ap.winorloss)/count(ap.accountid) as '胜率'from accountplayed as ap join `matchDetail` as md join account as a on ap.matchid = md.matchid and ap.accountid = a.accountid group by from_unixtime(md.`startTime`,'%Y-%m'),ap.accountid,a.nickname order by from_unixtime(md.`startTime`,'%Y-%m')"
+    cursor.execute(sql)
+    r1 = cursor.fetchall()
     for k,v in friden.items():
-        print k
         userInfo[k] = {}
+        #ltime:统计时间维度,目前是月
+        ltime = []
+        #月内,打的场次
+        count = []
+        #胜率
+        rate = []
+        #胜场
+        win = []
+        for item in r1:
+            if v == item['uid']:
+                ltime.append(item['月份'])
+                win.append(int(item['赢']))
+                rate.append(float(item['胜率']))
+                count.append(item['场次'])
+        userInfo[k]['wDautime'] = ltime
+        userInfo[k]['wDauwin'] = win
+        userInfo[k]['wDauCount'] =  count
+        userInfo[k]['wDauRatet'] =  rate
+        print k
         userInfo[k]['username'] = k
         userInfo[k]['howmany'] = d2d.gethowManyGameDoYouPlay(v)
         userInfo[k]['win'] = d2d.WinorLoss(v).count('win')
@@ -170,11 +196,11 @@ def writePlayPartyDetail2Json():
 
 def run():
     #writePlayPartyRate2Csv()
-    #writeHeroPool2csv()
+    #writeHeroPol2csv()
     writeUserInfo2Json()
     #worldcloud()
     #writeMatchDetail2Json()
-    writePlayPartyDetail2Json()
+    #writePlayPartyDetail2Json()
 
 if __name__ == "__main__":
     run()

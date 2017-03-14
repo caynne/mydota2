@@ -27,14 +27,13 @@
         <button type="button" id = 'monkye2'><img src="../avatar/There're%20%20trees,%20everywhere~.jpg" style="width:90px" class="circle"></button>
     </h1>
 
-
+    <div id = 'wDau' style="width: 1050px;height: 400px;" class ='echart4'></div>
     <div id = '1' style="width:1050px; height:400px;" class="echart1"></div>
     <div id = '4' style="width:1050px; height:400px;" class="echart1"></div>
-
+    <h4> 每个月输赢统计</h4>
     <h4>这些是你们的对友跟队手的昵称,还记得多少?</h4>
     <div><img src="../data/nickname.png" alt=""></div>
     <h2>打了多少把</h2>
-    <div id = '2' style="width: 500px;height: 500px;" class ='echart2'></div>
     <div id = '3' style="width:1250px; height:400px;" class="echart3"></div>
 
 
@@ -57,7 +56,7 @@
             var loss = []
             var win = []
             $.ajax({
-                url: '../data/20170313.json',
+                url: '../data/20170314.json',
                 type: 'GET',
                 dataType: 'json',
                 data: {},
@@ -144,7 +143,7 @@
             var win = []
             var loss = []
             $.ajax({
-                url: '../data/20170313PlayPartyDetail.json',
+                url: '../data/20170314PlayPartyDetail.json',
                 type: 'GET',
                 dataType: 'json',
                 data: {},
@@ -221,7 +220,7 @@
             var loss = []
             var win = []
             $.ajax({
-                url: '../data/20170313.json',
+                url: '../data/20170314.json',
                 type: 'GET',
                 dataType: 'json',
                 data: {},
@@ -309,7 +308,7 @@
             var win = []
             var loss = []
             $.ajax({
-                url: '../data/20170313PlayPartyDetail.json',
+                url: '../data/20170314PlayPartyDetail.json',
                 type: 'GET',
                 dataType: 'json',
                 data: {},
@@ -379,6 +378,243 @@
             myChart.setOption(option);
             })
         })
+        $("#bear").click(function(event){
+            var account = 'bear'
+            var rate = []
+            var win = []
+            var time = []
+            var count = []
+            var loss = []
+            $.ajax({
+            url:'../data/20170314.json',
+            type:'GET',
+            dataType:'json',
+            data : {},
+        }).done(function(data){
+                wDau = data;
+                time = wDau[account]['wDautime'];
+                win = wDau[account]['wDauwin'];
+                count = wDau[account]['wDauCount']
+                console.log(time)
+                console.log(win)
+                console.log(count)
+                for (var i=0;i < count.length;i++){
+                    rate.push(win[i]/count[i] *600)
+                }
+                for (var i=0;i < count.length;i++){
+                    loss.push(count[i]-win[i])
+                }
+                console.log(rate)
+                console.log(loss)
+
+            option = {
+                backgroundColor: "#344b58",
+                "title": {
+                    "text": "月表",
+                    x: "4%",
+
+                    textStyle: {
+                        color: '#fff',
+                        fontSize: '22'
+                    },
+                    subtextStyle: {
+                        color: '#90979c',
+                        fontSize: '16',
+
+                    },
+                },
+                "tooltip": {
+                    "trigger": "axis",
+                    "axisPointer": {
+                        "type": "shadow",
+                        textStyle: {
+                            color: "#fff"
+                        }
+
+                    },
+                },
+                "grid": {
+                    "borderWidth": 0,
+                    "top": 110,
+                    "bottom": 95,
+                    textStyle: {
+                        color: "#fff"
+                    }
+                },
+                "legend": {
+                    x: '4%',
+                    top: '11%',
+                    textStyle: {
+                        color: '#90979c',
+                    },
+                    "data": ['胜', '负', '场次','胜率']
+                },
+
+
+                "calculable": true,
+                "xAxis": [{
+                    "type": "category",
+                    "axisLine": {
+                        lineStyle: {
+                            color: '#90979c'
+                        }
+                    },
+                    "splitLine": {
+                        "show": false
+                    },
+                    "axisTick": {
+                        "show": false
+                    },
+                    "splitArea": {
+                        "show": false
+                    },
+                    "axisLabel": {
+                        "interval": 0,
+
+                    },
+                    "data": time,
+                }],
+                "yAxis": [{
+                    "type": "value",
+                    "scale":true,
+                    "splitLine": {
+                        "show": false
+                    },
+                    "axisLine": {
+                        lineStyle: {
+                            color: '#90979c'
+                        }
+                    },
+                    "axisTick": {
+                        "show": false
+                    },
+                    "axisLabel": {
+                        "interval": 0,
+
+                    },
+                    "splitArea": {
+                        "show": false
+                    },
+
+                }],
+                "dataZoom": [{
+                    "show": true,
+                    "height": 30,
+                    "xAxisIndex": [
+                        0
+                    ],
+                    bottom: 30,
+                    "start": 0,
+                    "end": 100,
+                    handleIcon: 'path://M306.1,413c0,2.2-1.8,4-4,4h-59.8c-2.2,0-4-1.8-4-4V200.8c0-2.2,1.8-4,4-4h59.8c2.2,0,4,1.8,4,4V413z',
+                    handleSize: '110%',
+                    handleStyle:{
+                        color:"#d3dee5",
+
+                    },
+                       textStyle:{
+                        color:"#fff"},
+                       borderColor:"#90979c"
+
+
+                }, {
+                    "type": "inside",
+                    "show": true,
+                    "height": 15,
+                    "start": 1,
+                    "end": 35
+                }],
+                "series": [{
+                        "name": "胜",
+                        "type": "bar",
+                        "stack": "总量",
+                        "barMaxWidth": 35,
+                        "barGap": "10%",
+                        "itemStyle": {
+                            "normal": {
+                                "color": "rgba(255,144,128,1)",
+                                "label": {
+                                    "show": true,
+                                    "textStyle": {
+                                        "color": "#fff"
+                                    },
+                                    "position": "insideTop",
+                                    formatter: function(p) {
+                                        return p.value > 0 ? (p.value) : '';
+                                    }
+                                }
+                            }
+                        },
+                        "data": win
+                    },
+
+                    {
+                        "name": "负",
+                        "type": "bar",
+                        "stack": "总量",
+                        "itemStyle": {
+                            "normal": {
+                                "color": "rgba(0,191,183,1)",
+                                "barBorderRadius": 0,
+                                "label": {
+                                    "show": true,
+                                    "position": "insideBottom",
+                                    formatter: function(p) {
+                                        return p.value > 0 ? (p.value) : '';
+                                    }
+                                }
+                            }
+                        },
+                        "data": loss
+                    }, {
+                        "name": "场次",
+                        "type": "line",
+                        "stack": "总量",
+                        symbolSize:10,
+                        symbol:'circle',
+                        "itemStyle": {
+                            "normal": {
+                                "color": "rgba(252,230,48,1)",
+                                "barBorderRadius": 0,
+                                "label": {
+                                    "show": true,
+                                    "position": "insideBottom",
+                                    formatter: function(p) {
+                                        return p.value > 0 ? (p.value) : '';
+                                    }
+                                }
+                            }
+                        },
+                        "data": count
+                    }, {
+                        "name": "胜率",
+                        "type": "line",
+
+                        symbolSize:10,
+                        symbol:'circle',
+                        "itemStyle": {
+                            "normal": {
+                                "color": "rgba(252,130,48,1)",
+                                "barBorderRadius": 0,
+                                "label": {
+                                    "show": true,
+                                    "position": "insideBottom",
+                                    formatter: function(p) {
+                                        var num = p.value/600*100
+                                        return num.toFixed(2) +'%'
+                                    }
+                                }
+                            }
+                        },
+                        "data": rate
+                    },
+                ]
+            }
+            var myChart = echarts.init(document.getElementById('wDau'));
+            myChart.setOption(option);
+        })
+        })
+
 
         $("#monkey").click(function(event){
             var account = 'monkey'
@@ -386,7 +622,7 @@
             var loss = []
             var win = []
             $.ajax({
-                url: '../data/20170313.json',
+                url: '../data/20170314.json',
                 type: 'GET',
                 dataType: 'json',
                 data: {},
@@ -474,7 +710,7 @@
             var win = []
             var loss = []
             $.ajax({
-                url: '../data/20170313PlayPartyDetail.json',
+                url: '../data/20170314PlayPartyDetail.json',
                 type: 'GET',
                 dataType: 'json',
                 data: {},
@@ -543,6 +779,241 @@
                 };
             myChart.setOption(option);
             })
+        })
+        $("#monkey").click(function(event){
+            var account = 'monkey'
+            var rate = []
+            var win = []
+            var time = []
+            var count = []
+            var loss = []
+            $.ajax({
+            url:'../data/20170314.json',
+            type:'GET',
+            dataType:'json',
+            data : {},
+        }).done(function(data){
+                wDau = data;
+                time = wDau[account]['wDautime'];
+                win = wDau[account]['wDauwin'];
+                count = wDau[account]['wDauCount']
+                console.log(time)
+                console.log(win)
+                console.log(count)
+                for (var i=0;i < count.length;i++){
+                    rate.push(win[i]/count[i] *600)
+                }
+                for (var i=0;i < count.length;i++){
+                    loss.push(count[i]-win[i])
+                }
+                console.log(rate)
+                console.log(loss)
+
+            option = {
+                backgroundColor: "#344b58",
+                "title": {
+                    "text": "月表",
+                    x: "4%",
+
+                    textStyle: {
+                        color: '#fff',
+                        fontSize: '22'
+                    },
+                    subtextStyle: {
+                        color: '#90979c',
+                        fontSize: '16',
+
+                    },
+                },
+                "tooltip": {
+                    "trigger": "axis",
+                    "axisPointer": {
+                        "type": "shadow",
+                        textStyle: {
+                            color: "#fff"
+                        }
+
+                    },
+                },
+                "grid": {
+                    "borderWidth": 0,
+                    "top": 110,
+                    "bottom": 95,
+                    textStyle: {
+                        color: "#fff"
+                    }
+                },
+                "legend": {
+                    x: '4%',
+                    top: '11%',
+                    textStyle: {
+                        color: '#90979c',
+                    },
+                    "data": ['胜', '负', '场次','胜率']
+                },
+
+
+                "calculable": true,
+                "xAxis": [{
+                    "type": "category",
+                    "axisLine": {
+                        lineStyle: {
+                            color: '#90979c'
+                        }
+                    },
+                    "splitLine": {
+                        "show": false
+                    },
+                    "axisTick": {
+                        "show": false
+                    },
+                    "splitArea": {
+                        "show": false
+                    },
+                    "axisLabel": {
+                        "interval": 0,
+
+                    },
+                    "data": time,
+                }],
+                "yAxis": [{
+                    "type": "value",
+                    "splitLine": {
+                        "show": false
+                    },
+                    "axisLine": {
+                        lineStyle: {
+                            color: '#90979c'
+                        }
+                    },
+                    "axisTick": {
+                        "show": false
+                    },
+                    "axisLabel": {
+                        "interval": 0,
+
+                    },
+                    "splitArea": {
+                        "show": false
+                    },
+
+                }],
+                "dataZoom": [{
+                    "show": true,
+                    "height": 30,
+                    "xAxisIndex": [
+                        0
+                    ],
+                    bottom: 30,
+                    "start": 0,
+                    "end": 100,
+                    handleIcon: 'path://M306.1,413c0,2.2-1.8,4-4,4h-59.8c-2.2,0-4-1.8-4-4V200.8c0-2.2,1.8-4,4-4h59.8c2.2,0,4,1.8,4,4V413z',
+                    handleSize: '110%',
+                    handleStyle:{
+                        color:"#d3dee5",
+
+                    },
+                       textStyle:{
+                        color:"#fff"},
+                       borderColor:"#90979c"
+
+
+                }, {
+                    "type": "inside",
+                    "show": true,
+                    "height": 15,
+                    "start": 1,
+                    "end": 35
+                }],
+                "series": [{
+                        "name": "胜",
+                        "type": "bar",
+                        "stack": "总量",
+                        "barMaxWidth": 35,
+                        "barGap": "10%",
+                        "itemStyle": {
+                            "normal": {
+                                "color": "rgba(255,144,128,1)",
+                                "label": {
+                                    "show": true,
+                                    "textStyle": {
+                                        "color": "#fff"
+                                    },
+                                    "position": "insideTop",
+                                    formatter: function(p) {
+                                        return p.value > 0 ? (p.value) : '';
+                                    }
+                                }
+                            }
+                        },
+                        "data": win
+                    },
+
+                    {
+                        "name": "负",
+                        "type": "bar",
+                        "stack": "总量",
+                        "itemStyle": {
+                            "normal": {
+                                "color": "rgba(0,191,183,1)",
+                                "barBorderRadius": 0,
+                                "label": {
+                                    "show": true,
+                                    "position": "insideBottom",
+                                    formatter: function(p) {
+                                        return p.value > 0 ? (p.value) : '';
+                                    }
+                                }
+                            }
+                        },
+                        "data": loss
+                    }, {
+                        "name": "场次",
+                        "type": "line",
+                        "stack": "总量",
+                        symbolSize:10,
+                        symbol:'circle',
+                        "itemStyle": {
+                            "normal": {
+                                "color": "rgba(252,230,48,1)",
+                                "barBorderRadius": 0,
+                                "label": {
+                                    "show": true,
+                                    "position": "insideBottom",
+                                    formatter: function(p) {
+                                        return p.value > 0 ? (p.value) : '';
+                                    }
+                                }
+                            }
+                        },
+                        "data": count
+                    }, {
+                        "name": "胜率",
+                        "type": "line",
+
+                        symbolSize:10,
+                        symbol:'circle',
+                        "itemStyle": {
+                            "normal": {
+                                "color": "rgba(252,130,48,1)",
+                                "barBorderRadius": 0,
+                                "label": {
+                                    "show": true,
+                                    "position": "insideBottom",
+                                    formatter: function(p) {
+                                        var num = p.value/600*100
+                                        return num.toFixed(2) +'%'
+                                    }
+                                }
+                            }
+                        },
+                        "data": rate
+                    },
+                ]
+            }
+            var myChart = echarts.init(document.getElementById('wDau'));
+            myChart.setOption(option);
+        })
         })
 
         $("#brave").click(function(event){
@@ -551,7 +1022,7 @@
             var loss = []
             var win = []
             $.ajax({
-                url: '../data/20170313.json',
+                url: '../data/20170314.json',
                 type: 'GET',
                 dataType: 'json',
                 data: {},
@@ -639,7 +1110,7 @@
             var win = []
             var loss = []
             $.ajax({
-                url: '../data/20170313PlayPartyDetail.json',
+                url: '../data/20170314PlayPartyDetail.json',
                 type: 'GET',
                 dataType: 'json',
                 data: {},
@@ -709,6 +1180,241 @@
             myChart.setOption(option);
             })
         })
+        $("#brave").click(function(event){
+            var account = 'brave'
+            var rate = []
+            var win = []
+            var time = []
+            var count = []
+            var loss = []
+            $.ajax({
+            url:'../data/20170314.json',
+            type:'GET',
+            dataType:'json',
+            data : {},
+        }).done(function(data){
+                wDau = data;
+                time = wDau[account]['wDautime'];
+                win = wDau[account]['wDauwin'];
+                count = wDau[account]['wDauCount']
+                console.log(time)
+                console.log(win)
+                console.log(count)
+                for (var i=0;i < count.length;i++){
+                    rate.push(win[i]/count[i] *600)
+                }
+                for (var i=0;i < count.length;i++){
+                    loss.push(count[i]-win[i])
+                }
+                console.log(rate)
+                console.log(loss)
+
+            option = {
+                backgroundColor: "#344b58",
+                "title": {
+                    "text": "月表",
+                    x: "4%",
+
+                    textStyle: {
+                        color: '#fff',
+                        fontSize: '22'
+                    },
+                    subtextStyle: {
+                        color: '#90979c',
+                        fontSize: '16',
+
+                    },
+                },
+                "tooltip": {
+                    "trigger": "axis",
+                    "axisPointer": {
+                        "type": "shadow",
+                        textStyle: {
+                            color: "#fff"
+                        }
+
+                    },
+                },
+                "grid": {
+                    "borderWidth": 0,
+                    "top": 110,
+                    "bottom": 95,
+                    textStyle: {
+                        color: "#fff"
+                    }
+                },
+                "legend": {
+                    x: '4%',
+                    top: '11%',
+                    textStyle: {
+                        color: '#90979c',
+                    },
+                    "data": ['胜', '负', '场次','胜率']
+                },
+
+
+                "calculable": true,
+                "xAxis": [{
+                    "type": "category",
+                    "axisLine": {
+                        lineStyle: {
+                            color: '#90979c'
+                        }
+                    },
+                    "splitLine": {
+                        "show": false
+                    },
+                    "axisTick": {
+                        "show": false
+                    },
+                    "splitArea": {
+                        "show": false
+                    },
+                    "axisLabel": {
+                        "interval": 0,
+
+                    },
+                    "data": time,
+                }],
+                "yAxis": [{
+                    "type": "value",
+                    "splitLine": {
+                        "show": false
+                    },
+                    "axisLine": {
+                        lineStyle: {
+                            color: '#90979c'
+                        }
+                    },
+                    "axisTick": {
+                        "show": false
+                    },
+                    "axisLabel": {
+                        "interval": 0,
+
+                    },
+                    "splitArea": {
+                        "show": false
+                    },
+
+                }],
+                "dataZoom": [{
+                    "show": true,
+                    "height": 30,
+                    "xAxisIndex": [
+                        0
+                    ],
+                    bottom: 30,
+                    "start": 0,
+                    "end": 100,
+                    handleIcon: 'path://M306.1,413c0,2.2-1.8,4-4,4h-59.8c-2.2,0-4-1.8-4-4V200.8c0-2.2,1.8-4,4-4h59.8c2.2,0,4,1.8,4,4V413z',
+                    handleSize: '110%',
+                    handleStyle:{
+                        color:"#d3dee5",
+
+                    },
+                       textStyle:{
+                        color:"#fff"},
+                       borderColor:"#90979c"
+
+
+                }, {
+                    "type": "inside",
+                    "show": true,
+                    "height": 15,
+                    "start": 1,
+                    "end": 35
+                }],
+                "series": [{
+                        "name": "胜",
+                        "type": "bar",
+                        "stack": "总量",
+                        "barMaxWidth": 35,
+                        "barGap": "10%",
+                        "itemStyle": {
+                            "normal": {
+                                "color": "rgba(255,144,128,1)",
+                                "label": {
+                                    "show": true,
+                                    "textStyle": {
+                                        "color": "#fff"
+                                    },
+                                    "position": "insideTop",
+                                    formatter: function(p) {
+                                        return p.value > 0 ? (p.value) : '';
+                                    }
+                                }
+                            }
+                        },
+                        "data": win
+                    },
+
+                    {
+                        "name": "负",
+                        "type": "bar",
+                        "stack": "总量",
+                        "itemStyle": {
+                            "normal": {
+                                "color": "rgba(0,191,183,1)",
+                                "barBorderRadius": 0,
+                                "label": {
+                                    "show": true,
+                                    "position": "insideBottom",
+                                    formatter: function(p) {
+                                        return p.value > 0 ? (p.value) : '';
+                                    }
+                                }
+                            }
+                        },
+                        "data": loss
+                    }, {
+                        "name": "场次",
+                        "type": "line",
+                        "stack": "总量",
+                        symbolSize:10,
+                        symbol:'circle',
+                        "itemStyle": {
+                            "normal": {
+                                "color": "rgba(252,230,48,1)",
+                                "barBorderRadius": 0,
+                                "label": {
+                                    "show": true,
+                                    "position": "insideBottom",
+                                    formatter: function(p) {
+                                        return p.value > 0 ? (p.value) : '';
+                                    }
+                                }
+                            }
+                        },
+                        "data": count
+                    }, {
+                        "name": "胜率",
+                        "type": "line",
+
+                        symbolSize:10,
+                        symbol:'circle',
+                        "itemStyle": {
+                            "normal": {
+                                "color": "rgba(252,130,48,1)",
+                                "barBorderRadius": 0,
+                                "label": {
+                                    "show": true,
+                                    "position": "insideBottom",
+                                    formatter: function(p) {
+                                        var num = p.value/600*100
+                                        return num.toFixed(2) +'%'
+                                    }
+                                }
+                            }
+                        },
+                        "data": rate
+                    },
+                ]
+            }
+            var myChart = echarts.init(document.getElementById('wDau'));
+            myChart.setOption(option);
+        })
+        })
 
         $("#man").click(function(event){
             var account = 'man'
@@ -716,7 +1422,7 @@
             var loss = []
             var win = []
             $.ajax({
-                url: '../data/20170313.json',
+                url: '../data/20170314.json',
                 type: 'GET',
                 dataType: 'json',
                 data: {},
@@ -804,7 +1510,7 @@
             var win = []
             var loss = []
             $.ajax({
-                url: '../data/20170313PlayPartyDetail.json',
+                url: '../data/20170314PlayPartyDetail.json',
                 type: 'GET',
                 dataType: 'json',
                 data: {},
@@ -873,6 +1579,241 @@
                 };
             myChart.setOption(option);
             })
+        })
+        $("#man").click(function(event){
+            var account = 'man'
+            var rate = []
+            var win = []
+            var time = []
+            var count = []
+            var loss = []
+            $.ajax({
+            url:'../data/20170314.json',
+            type:'GET',
+            dataType:'json',
+            data : {},
+        }).done(function(data){
+                wDau = data;
+                time = wDau[account]['wDautime'];
+                win = wDau[account]['wDauwin'];
+                count = wDau[account]['wDauCount']
+                console.log(time)
+                console.log(win)
+                console.log(count)
+                for (var i=0;i < count.length;i++){
+                    rate.push(win[i]/count[i] *600)
+                }
+                for (var i=0;i < count.length;i++){
+                    loss.push(count[i]-win[i])
+                }
+                console.log(rate)
+                console.log(loss)
+
+            option = {
+                backgroundColor: "#344b58",
+                "title": {
+                    "text": "月表",
+                    x: "4%",
+
+                    textStyle: {
+                        color: '#fff',
+                        fontSize: '22'
+                    },
+                    subtextStyle: {
+                        color: '#90979c',
+                        fontSize: '16',
+
+                    },
+                },
+                "tooltip": {
+                    "trigger": "axis",
+                    "axisPointer": {
+                        "type": "shadow",
+                        textStyle: {
+                            color: "#fff"
+                        }
+
+                    },
+                },
+                "grid": {
+                    "borderWidth": 0,
+                    "top": 110,
+                    "bottom": 95,
+                    textStyle: {
+                        color: "#fff"
+                    }
+                },
+                "legend": {
+                    x: '4%',
+                    top: '11%',
+                    textStyle: {
+                        color: '#90979c',
+                    },
+                    "data": ['胜', '负', '场次','胜率']
+                },
+
+
+                "calculable": true,
+                "xAxis": [{
+                    "type": "category",
+                    "axisLine": {
+                        lineStyle: {
+                            color: '#90979c'
+                        }
+                    },
+                    "splitLine": {
+                        "show": false
+                    },
+                    "axisTick": {
+                        "show": false
+                    },
+                    "splitArea": {
+                        "show": false
+                    },
+                    "axisLabel": {
+                        "interval": 0,
+
+                    },
+                    "data": time,
+                }],
+                "yAxis": [{
+                    "type": "value",
+                    "splitLine": {
+                        "show": false
+                    },
+                    "axisLine": {
+                        lineStyle: {
+                            color: '#90979c'
+                        }
+                    },
+                    "axisTick": {
+                        "show": false
+                    },
+                    "axisLabel": {
+                        "interval": 0,
+
+                    },
+                    "splitArea": {
+                        "show": false
+                    },
+
+                }],
+                "dataZoom": [{
+                    "show": true,
+                    "height": 30,
+                    "xAxisIndex": [
+                        0
+                    ],
+                    bottom: 30,
+                    "start": 0,
+                    "end": 100,
+                    handleIcon: 'path://M306.1,413c0,2.2-1.8,4-4,4h-59.8c-2.2,0-4-1.8-4-4V200.8c0-2.2,1.8-4,4-4h59.8c2.2,0,4,1.8,4,4V413z',
+                    handleSize: '110%',
+                    handleStyle:{
+                        color:"#d3dee5",
+
+                    },
+                       textStyle:{
+                        color:"#fff"},
+                       borderColor:"#90979c"
+
+
+                }, {
+                    "type": "inside",
+                    "show": true,
+                    "height": 15,
+                    "start": 1,
+                    "end": 35
+                }],
+                "series": [{
+                        "name": "胜",
+                        "type": "bar",
+                        "stack": "总量",
+                        "barMaxWidth": 35,
+                        "barGap": "10%",
+                        "itemStyle": {
+                            "normal": {
+                                "color": "rgba(255,144,128,1)",
+                                "label": {
+                                    "show": true,
+                                    "textStyle": {
+                                        "color": "#fff"
+                                    },
+                                    "position": "insideTop",
+                                    formatter: function(p) {
+                                        return p.value > 0 ? (p.value) : '';
+                                    }
+                                }
+                            }
+                        },
+                        "data": win
+                    },
+
+                    {
+                        "name": "负",
+                        "type": "bar",
+                        "stack": "总量",
+                        "itemStyle": {
+                            "normal": {
+                                "color": "rgba(0,191,183,1)",
+                                "barBorderRadius": 0,
+                                "label": {
+                                    "show": true,
+                                    "position": "insideBottom",
+                                    formatter: function(p) {
+                                        return p.value > 0 ? (p.value) : '';
+                                    }
+                                }
+                            }
+                        },
+                        "data": loss
+                    }, {
+                        "name": "场次",
+                        "type": "line",
+                        "stack": "总量",
+                        symbolSize:10,
+                        symbol:'circle',
+                        "itemStyle": {
+                            "normal": {
+                                "color": "rgba(252,230,48,1)",
+                                "barBorderRadius": 0,
+                                "label": {
+                                    "show": true,
+                                    "position": "insideBottom",
+                                    formatter: function(p) {
+                                        return p.value > 0 ? (p.value) : '';
+                                    }
+                                }
+                            }
+                        },
+                        "data": count
+                    }, {
+                        "name": "胜率",
+                        "type": "line",
+
+                        symbolSize:10,
+                        symbol:'circle',
+                        "itemStyle": {
+                            "normal": {
+                                "color": "rgba(252,130,48,1)",
+                                "barBorderRadius": 0,
+                                "label": {
+                                    "show": true,
+                                    "position": "insideBottom",
+                                    formatter: function(p) {
+                                        var num = p.value/600*100
+                                        return num.toFixed(2) +'%'
+                                    }
+                                }
+                            }
+                        },
+                        "data": rate
+                    },
+                ]
+            }
+            var myChart = echarts.init(document.getElementById('wDau'));
+            myChart.setOption(option);
+        })
         })
 
         $("#beard").click(function(event){
@@ -881,7 +1822,7 @@
             var loss = []
             var win = []
             $.ajax({
-                url: '../data/20170313.json',
+                url: '../data/20170314.json',
                 type: 'GET',
                 dataType: 'json',
                 data: {},
@@ -964,14 +1905,13 @@
             myChart.setOption(option);
             })
         })
-
         $("#beard").click(function(event){
             var account = 'beard'
             var rate = []
             var win = []
             var loss = []
             $.ajax({
-                url: '../data/20170313PlayPartyDetail.json',
+                url: '../data/20170314PlayPartyDetail.json',
                 type: 'GET',
                 dataType: 'json',
                 data: {},
@@ -1041,13 +1981,249 @@
             myChart.setOption(option);
             })
         })
+        $("#beard").click(function(event){
+            var account = 'beard'
+            var rate = []
+            var win = []
+            var time = []
+            var count = []
+            var loss = []
+            $.ajax({
+            url:'../data/20170314.json',
+            type:'GET',
+            dataType:'json',
+            data : {},
+        }).done(function(data){
+                wDau = data;
+                time = wDau[account]['wDautime'];
+                win = wDau[account]['wDauwin'];
+                count = wDau[account]['wDauCount']
+                console.log(time)
+                console.log(win)
+                console.log(count)
+                for (var i=0;i < count.length;i++){
+                    rate.push(win[i]/count[i] *600)
+                }
+                for (var i=0;i < count.length;i++){
+                    loss.push(count[i]-win[i])
+                }
+                console.log(rate)
+                console.log(loss)
+
+            option = {
+                backgroundColor: "#344b58",
+                "title": {
+                    "text": "月表",
+                    x: "4%",
+
+                    textStyle: {
+                        color: '#fff',
+                        fontSize: '22'
+                    },
+                    subtextStyle: {
+                        color: '#90979c',
+                        fontSize: '16',
+
+                    },
+                },
+                "tooltip": {
+                    "trigger": "axis",
+                    "axisPointer": {
+                        "type": "shadow",
+                        textStyle: {
+                            color: "#fff"
+                        }
+
+                    },
+                },
+                "grid": {
+                    "borderWidth": 0,
+                    "top": 110,
+                    "bottom": 95,
+                    textStyle: {
+                        color: "#fff"
+                    }
+                },
+                "legend": {
+                    x: '4%',
+                    top: '11%',
+                    textStyle: {
+                        color: '#90979c',
+                    },
+                    "data": ['胜', '负', '场次','胜率']
+                },
+
+
+                "calculable": true,
+                "xAxis": [{
+                    "type": "category",
+                    "axisLine": {
+                        lineStyle: {
+                            color: '#90979c'
+                        }
+                    },
+                    "splitLine": {
+                        "show": false
+                    },
+                    "axisTick": {
+                        "show": false
+                    },
+                    "splitArea": {
+                        "show": false
+                    },
+                    "axisLabel": {
+                        "interval": 0,
+
+                    },
+                    "data": time,
+                }],
+                "yAxis": [{
+                    "type": "value",
+                    "splitLine": {
+                        "show": false
+                    },
+                    "axisLine": {
+                        lineStyle: {
+                            color: '#90979c'
+                        }
+                    },
+                    "axisTick": {
+                        "show": false
+                    },
+                    "axisLabel": {
+                        "interval": 0,
+
+                    },
+                    "splitArea": {
+                        "show": false
+                    },
+
+                }],
+                "dataZoom": [{
+                    "show": true,
+                    "height": 30,
+                    "xAxisIndex": [
+                        0
+                    ],
+                    bottom: 30,
+                    "start": 0,
+                    "end": 100,
+                    handleIcon: 'path://M306.1,413c0,2.2-1.8,4-4,4h-59.8c-2.2,0-4-1.8-4-4V200.8c0-2.2,1.8-4,4-4h59.8c2.2,0,4,1.8,4,4V413z',
+                    handleSize: '110%',
+                    handleStyle:{
+                        color:"#d3dee5",
+
+                    },
+                       textStyle:{
+                        color:"#fff"},
+                       borderColor:"#90979c"
+
+
+                }, {
+                    "type": "inside",
+                    "show": true,
+                    "height": 15,
+                    "start": 1,
+                    "end": 35
+                }],
+                "series": [{
+                        "name": "胜",
+                        "type": "bar",
+                        "stack": "总量",
+                        "barMaxWidth": 35,
+                        "barGap": "10%",
+                        "itemStyle": {
+                            "normal": {
+                                "color": "rgba(255,144,128,1)",
+                                "label": {
+                                    "show": true,
+                                    "textStyle": {
+                                        "color": "#fff"
+                                    },
+                                    "position": "insideTop",
+                                    formatter: function(p) {
+                                        return p.value > 0 ? (p.value) : '';
+                                    }
+                                }
+                            }
+                        },
+                        "data": win
+                    },
+
+                    {
+                        "name": "负",
+                        "type": "bar",
+                        "stack": "总量",
+                        "itemStyle": {
+                            "normal": {
+                                "color": "rgba(0,191,183,1)",
+                                "barBorderRadius": 0,
+                                "label": {
+                                    "show": true,
+                                    "position": "insideBottom",
+                                    formatter: function(p) {
+                                        return p.value > 0 ? (p.value) : '';
+                                    }
+                                }
+                            }
+                        },
+                        "data": loss
+                    }, {
+                        "name": "场次",
+                        "type": "line",
+                        "stack": "总量",
+                        symbolSize:10,
+                        symbol:'circle',
+                        "itemStyle": {
+                            "normal": {
+                                "color": "rgba(252,230,48,1)",
+                                "barBorderRadius": 0,
+                                "label": {
+                                    "show": true,
+                                    "position": "insideBottom",
+                                    formatter: function(p) {
+                                        return p.value > 0 ? (p.value) : '';
+                                    }
+                                }
+                            }
+                        },
+                        "data": count
+                    }, {
+                        "name": "胜率",
+                        "type": "line",
+
+                        symbolSize:10,
+                        symbol:'circle',
+                        "itemStyle": {
+                            "normal": {
+                                "color": "rgba(252,130,48,1)",
+                                "barBorderRadius": 0,
+                                "label": {
+                                    "show": true,
+                                    "position": "insideBottom",
+                                    formatter: function(p) {
+                                        var num = p.value/600*100
+                                        return num.toFixed(2) +'%'
+                                    }
+                                }
+                            }
+                        },
+                        "data": rate
+                    },
+                ]
+            }
+            var myChart = echarts.init(document.getElementById('wDau'));
+            myChart.setOption(option);
+        })
+        })
+
         $("#monkye2").click(function(event){
             var account = 'monkey2'
             var heroName = []
             var loss = []
             var win = []
             $.ajax({
-                url: '../data/20170313.json',
+                url: '../data/20170314.json',
                 type: 'GET',
                 dataType: 'json',
                 data: {},
@@ -1135,7 +2311,7 @@
             var win = []
             var loss = []
             $.ajax({
-                url: '../data/20170313PlayPartyDetail.json',
+                url: '../data/20170314PlayPartyDetail.json',
                 type: 'GET',
                 dataType: 'json',
                 data: {},
@@ -1205,12 +2381,248 @@
             myChart.setOption(option);
             })
         })
+        $("#monkye2").click(function(event){
+            var account = 'monkye2'
+            var rate = []
+            var win = []
+            var time = []
+            var count = []
+            var loss = []
+            $.ajax({
+            url:'../data/20170314.json',
+            type:'GET',
+            dataType:'json',
+            data : {},
+        }).done(function(data){
+                wDau = data;
+                time = wDau[account]['wDautime'];
+                win = wDau[account]['wDauwin'];
+                count = wDau[account]['wDauCount']
+                console.log(time)
+                console.log(win)
+                console.log(count)
+                for (var i=0;i < count.length;i++){
+                    rate.push(win[i]/count[i] *600)
+                }
+                for (var i=0;i < count.length;i++){
+                    loss.push(count[i]-win[i])
+                }
+                console.log(rate)
+                console.log(loss)
+
+            option = {
+                backgroundColor: "#344b58",
+                "title": {
+                    "text": "月表",
+                    x: "4%",
+
+                    textStyle: {
+                        color: '#fff',
+                        fontSize: '22'
+                    },
+                    subtextStyle: {
+                        color: '#90979c',
+                        fontSize: '16',
+
+                    },
+                },
+                "tooltip": {
+                    "trigger": "axis",
+                    "axisPointer": {
+                        "type": "shadow",
+                        textStyle: {
+                            color: "#fff"
+                        }
+
+                    },
+                },
+                "grid": {
+                    "borderWidth": 0,
+                    "top": 110,
+                    "bottom": 95,
+                    textStyle: {
+                        color: "#fff"
+                    }
+                },
+                "legend": {
+                    x: '4%',
+                    top: '11%',
+                    textStyle: {
+                        color: '#90979c',
+                    },
+                    "data": ['胜', '负', '场次','胜率']
+                },
+
+
+                "calculable": true,
+                "xAxis": [{
+                    "type": "category",
+                    "axisLine": {
+                        lineStyle: {
+                            color: '#90979c'
+                        }
+                    },
+                    "splitLine": {
+                        "show": false
+                    },
+                    "axisTick": {
+                        "show": false
+                    },
+                    "splitArea": {
+                        "show": false
+                    },
+                    "axisLabel": {
+                        "interval": 0,
+
+                    },
+                    "data": time,
+                }],
+                "yAxis": [{
+                    "type": "value",
+                    "splitLine": {
+                        "show": false
+                    },
+                    "axisLine": {
+                        lineStyle: {
+                            color: '#90979c'
+                        }
+                    },
+                    "axisTick": {
+                        "show": false
+                    },
+                    "axisLabel": {
+                        "interval": 0,
+
+                    },
+                    "splitArea": {
+                        "show": false
+                    },
+
+                }],
+                "dataZoom": [{
+                    "show": true,
+                    "height": 30,
+                    "xAxisIndex": [
+                        0
+                    ],
+                    bottom: 30,
+                    "start": 0,
+                    "end": 100,
+                    handleIcon: 'path://M306.1,413c0,2.2-1.8,4-4,4h-59.8c-2.2,0-4-1.8-4-4V200.8c0-2.2,1.8-4,4-4h59.8c2.2,0,4,1.8,4,4V413z',
+                    handleSize: '110%',
+                    handleStyle:{
+                        color:"#d3dee5",
+
+                    },
+                       textStyle:{
+                        color:"#fff"},
+                       borderColor:"#90979c"
+
+
+                }, {
+                    "type": "inside",
+                    "show": true,
+                    "height": 15,
+                    "start": 1,
+                    "end": 35
+                }],
+                "series": [{
+                        "name": "胜",
+                        "type": "bar",
+                        "stack": "总量",
+                        "barMaxWidth": 35,
+                        "barGap": "10%",
+                        "itemStyle": {
+                            "normal": {
+                                "color": "rgba(255,144,128,1)",
+                                "label": {
+                                    "show": true,
+                                    "textStyle": {
+                                        "color": "#fff"
+                                    },
+                                    "position": "insideTop",
+                                    formatter: function(p) {
+                                        return p.value > 0 ? (p.value) : '';
+                                    }
+                                }
+                            }
+                        },
+                        "data": win
+                    },
+
+                    {
+                        "name": "负",
+                        "type": "bar",
+                        "stack": "总量",
+                        "itemStyle": {
+                            "normal": {
+                                "color": "rgba(0,191,183,1)",
+                                "barBorderRadius": 0,
+                                "label": {
+                                    "show": true,
+                                    "position": "insideBottom",
+                                    formatter: function(p) {
+                                        return p.value > 0 ? (p.value) : '';
+                                    }
+                                }
+                            }
+                        },
+                        "data": loss
+                    }, {
+                        "name": "场次",
+                        "type": "line",
+                        "stack": "总量",
+                        symbolSize:10,
+                        symbol:'circle',
+                        "itemStyle": {
+                            "normal": {
+                                "color": "rgba(252,230,48,1)",
+                                "barBorderRadius": 0,
+                                "label": {
+                                    "show": true,
+                                    "position": "insideBottom",
+                                    formatter: function(p) {
+                                        return p.value > 0 ? (p.value) : '';
+                                    }
+                                }
+                            }
+                        },
+                        "data": count
+                    }, {
+                        "name": "胜率",
+                        "type": "line",
+
+                        symbolSize:10,
+                        symbol:'circle',
+                        "itemStyle": {
+                            "normal": {
+                                "color": "rgba(252,130,48,1)",
+                                "barBorderRadius": 0,
+                                "label": {
+                                    "show": true,
+                                    "position": "insideBottom",
+                                    formatter: function(p) {
+                                        var num = p.value/600*100
+                                        return num.toFixed(2) +'%'
+                                    }
+                                }
+                            }
+                        },
+                        "data": rate
+                    },
+                ]
+            }
+            var myChart = echarts.init(document.getElementById('wDau'));
+            myChart.setOption(option);
+        })
+        })
 
     </script>
 
+
     <script>
         $.ajax({
-            url:'../data/20170313.json',
+            url:'../data/20170314.json',
             type:'GET',
             dataType:'json',
             data : {},
@@ -1364,7 +2776,7 @@
 
     <script>
         $.ajax({
-            url:'../data/20170313matchdetail.json',
+            url:'../data/20170314matchdetail.json',
             type:'GET',
             dataType:'json',
             data : {},
@@ -1649,6 +3061,11 @@
         var myChart = echarts.init(document.getElementById(3));
         myChart.setOption(option);
     })
+
+
     </script>
+
+
+
 </body>
 </html>

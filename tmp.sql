@@ -18,8 +18,4 @@ group by ap.accountid,a.nickname
 order by count(*) desc
 
 每个月多少局
-select a.nickname,from_unixtime(md.`startTime`,'%Y-%m') as '月份',count(ap.accountid) as'场次',sum(ap.winorloss) as'赢'
-from accountplayed as ap join `matchDetail` as md join account as a
-on ap.matchid = md.matchid and ap.accountid = a.accountid
-group by from_unixtime(md.`startTime`,'%Y-%m'),ap.accountid,a.nickname
-order by from_unixtime(md.`startTime`,'%Y-%m') desc
+select a.nickname,from_unixtime(md.`startTime`,'%Y-%m') as '月份',count(ap.accountid) as'场次',sum(ap.winorloss) as'赢' from accountplayed as ap join `matchDetail` as md join account as a on ap.matchid = md.matchid and ap.accountid = a.accountid group by from_unixtime(md.`startTime`,'%Y-%m'),ap.accountid,a.nickname order by from_unixtime(md.`startTime`,'%Y-%m') desc
