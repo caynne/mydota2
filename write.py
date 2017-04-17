@@ -200,7 +200,7 @@ def run():
     writeUserInfo2Json()
     #worldcloud()
     #writeMatchDetail2Json()
-    #writePlayPartyDetail2Json()
+    writePlayPartyDetail2Json()
 
 if __name__ == "__main__":
     run()

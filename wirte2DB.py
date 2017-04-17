@@ -17,7 +17,7 @@ api = dota2api.Initialise('548C0DBC83E2510AE245A6E1AFCCB5BA')
 conn = conn.connDB()
 cursor = conn.cursor()
 cf = ConfigParser.ConfigParser()
-cf.read('../config.conf')
+cf.read('./config.conf')
 
 friden = {"brave":169478997,"bear":337190674,"monkey":131173904,"man":284155258,"beard":245587068,'''"ass":123343610,''''monkey2':336778995}
 
@@ -187,7 +187,7 @@ def f1():
         cursor.execute('Update matchDetail set gameMode = %s where matchId = %s',value)
         conn.commit()
         count = count + 1
-        print count
+    print count
 
 
 def run():
